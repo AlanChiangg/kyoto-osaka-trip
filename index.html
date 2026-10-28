@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="京阪">
+<meta name="theme-color" content="#F4EFE7">
+<meta name="robots" content="noindex, nofollow">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' fill='%23F4EFE7'/%3E%3Ccircle cx='90' cy='70' r='44' fill='%23E9DFCF'/%3E%3Cpath d='M28 50 Q90 34 152 50 L149 64 Q90 52 31 64Z' fill='%23C2412D'/%3E%3Crect x='44' y='78' width='92' height='10' fill='%23C2412D'/%3E%3Crect x='56' y='60' width='13' height='94' fill='%23C2412D'/%3E%3Crect x='111' y='60' width='13' height='94' fill='%23C2412D'/%3E%3Crect x='85' y='62' width='10' height='18' fill='%23C2412D'/%3E%3Crect x='0' y='154' width='180' height='26' fill='%2322201E'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23F4EFE7'/%3E%3Cpath d='M7 15 Q32 9 57 15 L56 21 Q32 16 8 21Z' fill='%23C2412D'/%3E%3Crect x='13' y='27' width='38' height='5' fill='%23C2412D'/%3E%3Crect x='18' y='19' width='6' height='38' fill='%23C2412D'/%3E%3Crect x='40' y='19' width='6' height='38' fill='%23C2412D'/%3E%3Crect x='30' y='20' width='4' height='8' fill='%23C2412D'/%3E%3C/svg%3E">
+<title>京阪之旅</title>
+<style>
+  :root{
+    --paper:#F4EFE7;
+    --panel:#FFFDFA;
+    --ink:#22201E;
+    --muted:#77706A;
+    --rule:#DED5C7;
+    --ai:#2E4A6B;
+    --ai-soft:rgba(46,74,107,.08);
+    --shu:#C2412D;
+    --kin:#B08A3E;
+    --ok:#557A3C;
+    --shadow:0 1px 0 rgba(34,32,30,.05), 0 8px 22px -14px rgba(34,32,30,.3);
+    --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--paper);
+    background-image:
+      linear-gradient(to right, rgba(34,32,30,.04) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(34,32,30,.04) 1px, transparent 1px);
+    background-size:22px 22px;
+    color:var(--ink);
+    font-family:var(--sans);
+    -webkit-font-smoothing:antialiased;
+    padding:env(safe-area-inset-top) 0 calc(48px + env(safe-area-inset-bottom));
+  }
+  .wrap{max-width:720px;margin:0 auto;padding:0 16px}
+  a{color:var(--ai)}
+
+  /* ---- header ---- */
+  header{padding:26px 0 16px}
+  .eyebrow{
+    font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--muted);display:flex;gap:10px;align-items:center;flex-wrap:wrap
+  }
+  .eyebrow b{color:var(--shu);font-weight:600}
+  .hero{display:flex;align-items:stretch;margin-top:10px;border-top:2px solid var(--shu)}
+  .h1{flex:1.3;padding:12px 16px 6px 0}
+  .h2{flex:1;padding:12px 0 6px 16px;border-left:1px solid var(--rule)}
+  .lbl{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+  .title{font-size:34px;font-weight:700;letter-spacing:-.01em;line-height:1.1;margin-top:6px}
+  .title small{display:block;font-family:var(--mono);font-size:12px;font-weight:400;letter-spacing:.08em;color:var(--muted);margin-top:6px}
+  .n{
+    font-family:var(--mono);font-size:58px;line-height:.9;font-weight:600;letter-spacing:-.05em;
+    font-variant-numeric:tabular-nums;color:var(--shu);margin-top:6px
+  }
+  .n span{font-size:14px;letter-spacing:0;margin-left:5px;color:var(--muted);font-weight:400}
+  .n.live{font-size:30px;line-height:1.1;color:var(--ai)}
+  .n.over{font-size:26px;line-height:1.2;color:var(--muted)}
+  .sub{font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.06em;margin-top:8px;line-height:1.7}
+
+  /* ---- tabs ---- */
+  nav{
+    position:sticky;top:0;z-index:20;background:var(--paper);
+    border-bottom:1px solid var(--rule);display:flex;gap:0;margin-bottom:16px;
+    overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch
+  }
+  nav::-webkit-scrollbar{display:none}
+  nav button{
+    flex:1 1 0;min-width:0;appearance:none;border:0;background:none;font-family:var(--mono);
+    padding:9px 2px 8px;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;
+    margin-bottom:-1px;line-height:1.25;touch-action:manipulation
+  }
+  nav button b{display:block;font-size:12px;letter-spacing:.1em;font-weight:600}
+  nav button small{display:block;font-size:10px;letter-spacing:.04em;margin-top:2px}
+  nav button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--shu)}
+  nav button.today b::after{content:"•";color:var(--shu);margin-left:3px}
+  nav button:focus-visible{outline:2px solid var(--ai);outline-offset:-4px}
+
+  /* ---- panel ---- */
+  .panel{
+    background:var(--panel);border:1px solid var(--rule);border-radius:4px;
+    box-shadow:var(--shadow);margin-bottom:14px;overflow:hidden
+  }
+  .panel > .head{
+    display:flex;justify-content:space-between;align-items:baseline;gap:10px;
+    padding:12px 15px;border-bottom:1px solid var(--rule)
+  }
+  .panel > .head h2{margin:0;font-size:16px;font-weight:700;letter-spacing:-.01em}
+  .panel > .head h2 small{font-family:var(--mono);font-size:11px;font-weight:400;color:var(--muted);letter-spacing:.08em;margin-right:8px}
+  .panel > .head .cnt{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;color:var(--muted);white-space:nowrap}
+  .panel > .head .cnt b{color:var(--ok);font-weight:600}
+
+  /* ---- timeline items ---- */
+  .list{padding:4px 0}
+  .it{
+    display:grid;grid-template-columns:22px 40px 1fr;gap:0 12px;align-items:start;
+    padding:12px 15px;border-bottom:1px solid rgba(222,213,199,.7);position:relative
+  }
+  .it:last-child{border-bottom:0}
+  .it .box{
+    width:19px;height:19px;border:1.5px solid var(--rule);border-radius:3px;margin-top:9px;
+    display:grid;place-items:center;cursor:pointer;background:#fff;transition:background .12s,border-color .12s;
+    touch-action:manipulation;flex:none
+  }
+  .it .box svg{width:12px;height:12px;opacity:0;transform:scale(.7);transition:.14s}
+  .it[data-on="1"] .box{background:var(--ok);border-color:var(--ok)}
+  .it[data-on="1"] .box svg{opacity:1;transform:scale(1)}
+  .it[data-on="1"] .nm{color:var(--muted);text-decoration:line-through;text-decoration-color:rgba(119,112,106,.5)}
+  .it .ic{
+    width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font-size:20px;
+    background:var(--ai-soft);border:1px solid rgba(46,74,107,.15);flex:none
+  }
+  .it .ic.food{background:rgba(194,65,45,.08);border-color:rgba(194,65,45,.2)}
+  .it .ic.stay{background:rgba(176,138,62,.11);border-color:rgba(176,138,62,.25)}
+  .it .ic.move{background:rgba(34,32,30,.05);border-color:rgba(34,32,30,.12)}
+  .it .c{min-width:0}
+  .it .t{font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--shu);font-weight:600;margin-bottom:2px}
+  .it .t.none{display:none}
+  .it .nm{font-size:15.5px;font-weight:600;line-height:1.35;letter-spacing:-.005em}
+  .it .ln{
+    display:inline-block;font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;color:var(--ai);
+    border:1px solid rgba(46,74,107,.3);border-radius:3px;padding:2px 6px;margin-top:5px;line-height:1.3
+  }
+  .it .sb{font-size:12.5px;color:var(--muted);line-height:1.5;margin-top:3px}
+  .it .acts{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+  .pill{
+    display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:11px;letter-spacing:.04em;
+    padding:6px 10px;border:1px solid var(--rule);border-radius:999px;background:#fff;color:var(--ink);
+    text-decoration:none;line-height:1;touch-action:manipulation;white-space:nowrap
+  }
+  .pill svg{width:12px;height:12px;flex:none}
+  .pill.map{border-color:rgba(46,74,107,.4);color:var(--ai)}
+  .pill.tel{border-color:rgba(85,122,60,.4);color:var(--ok)}
+  .pill.web{border-color:rgba(176,138,62,.5);color:#8A6A28}
+  .pill:hover{background:var(--ai-soft)}
+  .pill:active{transform:translateY(1px)}
+  .or{
+    font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--muted);
+    align-self:center;padding:0 2px
+  }
+
+  /* ---- info tab ---- */
+  .kv{display:grid;grid-template-columns:96px 1fr;gap:8px 12px;padding:13px 15px;border-bottom:1px solid rgba(222,213,199,.7);font-size:14px;line-height:1.55}
+  .kv:last-child{border-bottom:0}
+  .kv .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;color:var(--muted);text-transform:uppercase;padding-top:3px}
+  .kv .v b{font-weight:600}
+  .kv .v .acts{display:flex;gap:6px;flex-wrap:wrap;margin-top:7px}
+  .kv .v em{display:block;font-style:normal;color:var(--muted);font-size:12.5px;margin-top:2px}
+  .flight{display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:15px;font-weight:600;letter-spacing:-.01em}
+  .flight .arrow{color:var(--muted);font-weight:400}
+  .note{font-size:12.5px;color:var(--muted);line-height:1.7;padding:12px 15px}
+  .note b{color:var(--ink);font-weight:600}
+  .btn{
+    appearance:none;border:1px solid var(--rule);background:#fff;border-radius:3px;
+    font-family:var(--mono);font-size:11px;letter-spacing:.08em;padding:7px 11px;cursor:pointer;color:var(--ink)
+  }
+  .btn:hover{border-color:var(--muted)}
+  .hide{display:none}
+  footer{font-family:var(--mono);font-size:10px;letter-spacing:.1em;color:var(--muted);text-align:center;padding:20px 0 0;text-transform:uppercase}
+
+  @media (max-width:520px){
+    .title{font-size:28px}
+    .n{font-size:46px}
+    .h1{padding-right:12px}.h2{padding-left:12px}
+    .it{grid-template-columns:20px 36px 1fr;gap:0 10px;padding:12px 13px}
+    .it .ic{width:36px;height:36px;font-size:18px}
+    .kv{grid-template-columns:1fr;gap:4px}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow"><b>KYOTO · OSAKA · 京阪</b><span>2026 · 12/8 – 12/12 · 5 天 4 夜</span></div>
+  <div class="hero">
+    <div class="h1">
+      <div class="lbl">京都・大阪</div>
+      <div class="title">京阪之旅<small>京都 2 晚 · 大阪 2 晚</small></div>
+    </div>
+    <div class="h2">
+      <div class="lbl" id="cdl">距離出發</div>
+      <div class="n" id="cd">—<span>天</span></div>
+      <div class="sub" id="cds">12 / 8（二）出發</div>
+    </div>
+  </div>
+</header>
+
+<nav id="nav" aria-label="行程日期"></nav>
+
+<main id="view"></main>
+
+<footer>Kyoto · Osaka 2026 · 點勾勾可記錄已完成</footer>
+</div>
+
+<script>
+/* ================= 資料 ================= */
+const TABELOG_EDOGAWA='https://tabelog.com/tw/kyoto/A2601/A260101/26003102/';
+const TRIP = [
+  {
+    date:'2026-12-08', d:'12/8', w:'二', title:'抵達・京都',
+    items:[
+      {t:'11:15', ic:'✈️', k:'move', nm:'抵達關西機場 KIX', sb:'入境抓 1.5 小時', q:'関西国際空港'},
+      {t:'', ic:'🚆', k:'move', nm:'關西機場 → JR 京都站', ln:'JR HARUKA', sb:'搭 HARUKA 直達京都', q:'京都駅'},
+      {t:'14:45', ic:'🏨', k:'stay', nm:'京都麗嘉皇家酒店', sb:'RIHGA Royal Hotel Kyoto・預計抵達', q:'リーガロイヤルホテル京都'},
+      {t:'19:30', ic:'🥩', k:'food', nm:'京的燒肉處 弘 京都站前店', sb:'燒肉・晚餐', q:'京の焼肉処 弘 京都駅前店'},
+    ]
+  },
+  {
+    date:'2026-12-09', d:'12/9', w:'三', title:'嵐山・京都站',
+    items:[
+      {t:'08:00 集合', ic:'🚃', k:'move', nm:'JR 京都站 → JR 嵯峨嵐山站', ln:'JR 嵯峨野線', sb:'約 20 分鐘・預計 9 點到達｜早餐在京都車站或嵐山吃都可以', q:'JR嵯峨嵐山駅'},
+      {t:'中午', ic:'🍜', k:'food', nm:'嵐山よしむら', sb:'蕎麥麵・午餐｜不能預約、現場排隊，預計 2 點離開嵐山', q:'嵐山よしむら'},
+      {t:'14:00', ic:'🚃', k:'move', nm:'JR 嵯峨嵐山站 → JR 京都站', ln:'JR 嵯峨野線', sb:'約 20 分鐘', q:'JR嵯峨嵐山駅'},
+      {t:'', ic:'🛍️', k:'spot', nm:'逛街買伴手禮 & 京都塔', sb:'京都車站周邊', q:'京都タワー'},
+      {t:'19:00', ic:'🍱', k:'food', nm:'江戶川 近鐵京都站店', sb:'鰻魚・晚餐（Porta 店）', q:'江戸川 近鉄京都駅店', url:TABELOG_EDOGAWA, ul:'Tabelog'},
+    ]
+  },
+  {
+    date:'2026-12-10', d:'12/10', w:'四', title:'清水寺・移動大阪',
+    items:[
+      {t:'08:00 集合', ic:'🚌', k:'move', nm:'七条堀川 → 清水道', ln:'市公車 206', sb:'車程約 40 分鐘', q:'七条堀川 バス停'},
+      {t:'09:00 – 13:00', ic:'⛩️', k:'spot', nm:'清水寺・逛街吃飯', sb:'午餐自理（商店街）', q:'清水寺'},
+      {t:'13:10 – 14:00', ic:'🚌', k:'move', nm:'清水道 → 下京區總合廳舍前', ln:'市公車 206', sb:'下京區公所・車程約 35 分鐘', q:'清水道 バス停'},
+      {t:'14:10 – 14:30', ic:'🚶', k:'move', nm:'下京區公所 → 京都麗嘉皇家酒店 → 京都車站', ln:'走路', sb:'回飯店拿行李去大阪', q:'リーガロイヤルホテル京都'},
+      {t:'14:30 – 15:00', ic:'🚃', k:'move', nm:'京都車站 → 大阪梅田', ln:'JR 京都線', sb:'車程約 30 分鐘', q:'京都駅'},
+      {t:'15:00 – 15:20', ic:'🏨', k:'stay', nm:'Hotel Intergate 大阪梅田', ln:'走路', sb:'先 check in，再去逛梅田', q:'ホテルインターゲート大阪梅田'},
+      {t:'15:30 – 晚上', ic:'🛍️', k:'spot', nm:'逛梅田百貨', sb:'晚餐自理', q:'梅田 百貨店'},
+    ]
+  },
+  {
+    date:'2026-12-11', d:'12/11', w:'五', title:'大阪城・心齋橋',
+    items:[
+      {t:'08:30 – 09:00', ic:'🚃', k:'move', nm:'飯店 → 大阪城公園站', ln:'JR 大阪環狀線', sb:'車程約 20 分鐘', q:'大阪城公園駅'},
+      {t:'09:00 – 11:30', ic:'🏯', k:'spot', nm:'大阪城', sb:'大阪城公園・天守閣', q:'大阪城天守閣'},
+      {t:'11:50 – 12:20', ic:'🚇', k:'move', nm:'森之宮站 → 心齋橋站', ln:'地鐵 長堀鶴見綠地線', sb:'車程約 30 分鐘', q:'森ノ宮駅'},
+      {t:'12:30 – 20:00', ic:'🛍️', k:'spot', nm:'心齋橋商店街 & 道頓堀', sb:'午餐 & 晚餐自理', q:'心斎橋筋商店街', more:[{nm:'道頓堀', q:'道頓堀'}]},
+      {t:'20:00 – 20:30', ic:'🚇', k:'move', nm:'難波站 → 西梅田站', ln:'地鐵 四橋線', sb:'到站後走路回飯店', q:'なんば駅 四つ橋線'},
+    ]
+  },
+  {
+    date:'2026-12-12', d:'12/12', w:'六', title:'回程',
+    items:[
+      {t:'07:00 – 10:30', ic:'🍳', k:'food', nm:'早餐', sb:'飯店早餐時段'},
+      {t:'11:00', ic:'🧳', k:'stay', nm:'Check out', sb:'Hotel Intergate 大阪梅田'},
+      {t:'12:03 / 12:33', ic:'🚆', k:'move', nm:'搭 HARUKA 前往關西機場', ln:'JR HARUKA', sb:'預計搭 12:03 或 12:33 的車'},
+      {t:'13:30 前', ic:'✈️', k:'move', nm:'抵達關西機場', sb:'進關、逛免稅店', q:'関西国際空港'},
+    ]
+  },
+];
+
+const INFO = {
+  flights:[
+    {lbl:'去程', a:'台灣', b:'關西 KIX', t:'12/8（二）11:15 抵達關西機場', note:'入境抓 1.5 小時，再搭 HARUKA 到京都'},
+    {lbl:'回程', a:'關西 KIX', b:'台灣', t:'12/12（六）13:30 前抵達機場', note:'搭 12:03 或 12:33 的 HARUKA'},
+  ],
+  lines:[
+    {k:'機場線', nm:'JR HARUKA', note:'12/8 機場 → 京都・12/12 大阪 → 機場'},
+    {k:'京都', nm:'JR 嵯峨野線', note:'12/9 京都站 ⇄ 嵯峨嵐山站'},
+    {k:'京都', nm:'市公車 206', note:'12/10 七条堀川 ⇄ 清水道'},
+    {k:'京都→大阪', nm:'JR 京都線', note:'12/10 京都車站 → 大阪梅田'},
+    {k:'大阪', nm:'JR 大阪環狀線', note:'12/11 → 大阪城公園站'},
+    {k:'大阪', nm:'地鐵 長堀鶴見綠地線', note:'12/11 森之宮 → 心齋橋'},
+    {k:'大阪', nm:'地鐵 四橋線', note:'12/11 難波 → 西梅田'},
+  ],
+  stays:[
+    {nm:'京都麗嘉皇家酒店', en:'RIHGA Royal Hotel Kyoto', d:'12/8 – 12/10（2 晚）', q:'リーガロイヤルホテル京都'},
+    {nm:'Hotel Intergate 大阪梅田', en:'12/12 早餐 7:00 – 10:30・11:00 check out', d:'12/10 – 12/12（2 晚）', q:'ホテルインターゲート大阪梅田'},
+  ],
+};
+
+/* ================= 工具 ================= */
+const KEY='keihan2026';
+let DONE={};
+try{ DONE=JSON.parse(localStorage.getItem(KEY)||'{}') }catch(e){ DONE={} }
+function save(){ try{ localStorage.setItem(KEY,JSON.stringify(DONE)) }catch(e){} }
+
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const mapURL=q=>'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(q);
+const PIN='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s7-6.2 7-12a7 7 0 0 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.6"/></svg>';
+const PHONE='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6.2 6.2l1.3-1.3a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg>';
+const LINK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg>';
+const CHECK='<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg>';
+
+function todayISO(){
+  const d=new Date(); const p=n=>String(n).padStart(2,'0');
+  return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate());
+}
+function dayDiff(a,b){ return Math.round((new Date(b+'T00:00:00')-new Date(a+'T00:00:00'))/864e5) }
+
+/* ================= 倒數 ================= */
+function countdown(){
+  const t=todayISO(), first=TRIP[0].date, last=TRIP[TRIP.length-1].date;
+  const el=document.getElementById('cd'), lbl=document.getElementById('cdl'), sub=document.getElementById('cds');
+  const toStart=dayDiff(t,first);
+  if(toStart>0){
+    lbl.textContent='距離出發'; el.className='n'; el.innerHTML=toStart+'<span>天</span>';
+    sub.textContent=TRIP[0].d.replace('/',' / ')+'（'+TRIP[0].w+'）出發';
+  }else if(dayDiff(t,last)>=0){
+    const n=dayDiff(first,t)+1;
+    lbl.textContent='旅程進行中'; el.className='n live'; el.innerHTML='DAY '+n+'<span>/ '+TRIP.length+'</span>';
+    sub.textContent=TRIP[n-1].d+'（'+TRIP[n-1].w+'）'+TRIP[n-1].title;
+  }else{
+    lbl.textContent='旅程結束'; el.className='n over'; el.textContent='歡迎回家';
+    sub.textContent='下次再去！';
+  }
+}
+
+/* ================= 分頁 ================= */
+let CUR=0;
+function renderNav(){
+  const t=todayISO();
+  const nav=document.getElementById('nav'); nav.innerHTML='';
+  TRIP.forEach((day,i)=>{
+    const b=document.createElement('button');
+    b.innerHTML='<b>D'+(i+1)+'</b><small>'+day.d+' '+day.w+'</small>';
+    b.setAttribute('aria-selected', i===CUR?'true':'false');
+    if(day.date===t) b.classList.add('today');
+    b.onclick=()=>{ CUR=i; render() };
+    nav.appendChild(b);
+  });
+  const b=document.createElement('button');
+  b.innerHTML='<b>INFO</b><small>航班・住宿</small>';
+  b.setAttribute('aria-selected', CUR===TRIP.length?'true':'false');
+  b.onclick=()=>{ CUR=TRIP.length; render() };
+  nav.appendChild(b);
+}
+
+function pillMap(q,label){ return '<a class="pill map" target="_blank" rel="noopener" href="'+mapURL(q)+'">'+PIN+esc(label||'Google 地圖')+'</a>' }
+function pillTel(tel){ return '<a class="pill tel" href="tel:'+tel.replace(/[^0-9+]/g,'')+'">'+PHONE+esc(tel)+'</a>' }
+function pillWeb(url,label){ return '<a class="pill web" target="_blank" rel="noopener" href="'+esc(url)+'">'+LINK+esc(label)+'</a>' }
+
+function renderDay(i){
+  const day=TRIP[i];
+  const total=day.items.length, done=day.items.filter((_,j)=>DONE[i+'-'+j]).length;
+  let h='<div class="panel"><div class="head"><h2><small>'+day.d+'（'+day.w+'）</small>'+esc(day.title)+'</h2>'+
+        '<span class="cnt"><b>'+done+'</b> / '+total+' 完成</span></div><div class="list">';
+  day.items.forEach((it,j)=>{
+    const id=i+'-'+j, on=DONE[id]?'1':'0';
+    let acts='';
+    if(it.q) acts+=pillMap(it.q, it.alt||it.more?it.nm.split(' ')[0]:null);
+    if(it.alt){ acts+='<span class="or">OR</span>'+pillMap(it.alt.q, it.alt.nm) }
+    if(it.more) it.more.forEach(m=>{ acts+=pillMap(m.q, m.nm) });
+    if(it.url) acts+=pillWeb(it.url, it.ul||'網站');
+    if(it.tel) acts+=pillTel(it.tel);
+    h+='<div class="it" data-on="'+on+'" data-id="'+id+'">'+
+       '<div class="box" role="checkbox" aria-checked="'+(on==='1')+'" tabindex="0" aria-label="標記完成">'+CHECK+'</div>'+
+       '<div class="ic '+it.k+'">'+it.ic+'</div>'+
+       '<div class="c">'+
+         '<div class="t'+(it.t?'':' none')+'">'+(it.t?esc(it.t):'—')+'</div>'+
+         '<div class="nm">'+esc(it.nm)+'</div>'+
+         (it.ln?'<div class="ln">'+esc(it.ln)+'</div>':'')+
+         (it.sb?'<div class="sb">'+esc(it.sb)+'</div>':'')+
+         (acts?'<div class="acts">'+acts+'</div>':'')+
+       '</div></div>';
+  });
+  h+='</div></div>';
+  return h;
+}
+
+function renderInfo(){
+  let h='<div class="panel"><div class="head"><h2>航班</h2><span class="cnt">KIX 關西機場</span></div>';
+  INFO.flights.forEach(f=>{
+    h+='<div class="kv"><div class="k">'+f.lbl+'</div><div class="v">'+
+       '<div class="flight">'+esc(f.a)+'<span class="arrow">→</span>'+esc(f.b)+'</div>'+
+       '<b>'+esc(f.t)+'</b><em>'+esc(f.note)+'</em></div></div>';
+  });
+  h+='</div>';
+
+  h+='<div class="panel"><div class="head"><h2>交通</h2><span class="cnt">'+INFO.lines.length+' 條路線</span></div>';
+  INFO.lines.forEach(l=>{
+    h+='<div class="kv"><div class="k">'+esc(l.k)+'</div><div class="v"><b>'+esc(l.nm)+'</b><em>'+esc(l.note)+'</em></div></div>';
+  });
+  h+='</div>';
+
+  h+='<div class="panel"><div class="head"><h2>住宿</h2><span class="cnt">2 間・各 2 晚</span></div>';
+  INFO.stays.forEach((s,i)=>{
+    h+='<div class="kv"><div class="k">飯店 '+(i+1)+'</div><div class="v"><b>'+esc(s.nm)+'</b><em>'+esc(s.d)+'</em><em>'+esc(s.en)+'</em>'+
+       '<div class="acts">'+pillMap(s.q)+'</div></div></div>';
+  });
+  h+='</div>';
+
+  h+='<div class="panel"><div class="head"><h2>備忘</h2></div><div class="note">'+
+     '<b>加到手機主畫面：</b>iPhone 用 Safari 開啟 → 分享 → 加入主畫面；Android 用 Chrome → 選單 → 加到主畫面。<br>'+
+     '<b>時差：</b>日本比台灣快 1 小時。<br>'+
+     '<b>完成勾選</b>只存在自己的手機裡，不會同步給其他人。'+
+     '</div><div class="note" style="padding-top:0"><button class="btn" onclick="resetDone()">清除所有勾選</button></div></div>';
+  return h;
+}
+
+function render(){
+  renderNav();
+  const v=document.getElementById('view');
+  v.innerHTML = CUR<TRIP.length ? renderDay(CUR) : renderInfo();
+}
+
+function resetDone(){ if(confirm('要清除所有勾選嗎？')){ DONE={}; save(); render() } }
+
+document.getElementById('view').addEventListener('click',e=>{
+  const box=e.target.closest('.box'); if(!box) return;
+  const it=box.closest('.it'), id=it.dataset.id;
+  if(DONE[id]) delete DONE[id]; else DONE[id]=1;
+  save(); render();
+});
+document.getElementById('view').addEventListener('keydown',e=>{
+  if((e.key===' '||e.key==='Enter') && e.target.classList.contains('box')){ e.preventDefault(); e.target.click() }
+});
+
+/* 自動跳到今天 */
+(function(){
+  const t=todayISO(); const i=TRIP.findIndex(d=>d.date===t);
+  if(i>=0) CUR=i;
+})();
+countdown(); render();
+</script>
+</body>
+</html>
