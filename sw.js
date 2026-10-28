@@ -1,6 +1,6 @@
 /* 離線快取：頁面先試網路（3 秒內沒回應就用快取），圖示等靜態檔直接用快取。
    改了 index.html 要把 VERSION 加 1，手機才會換新。 */
-const VERSION = 'keihan-v2';
+const VERSION = 'keihan-v3';
 const ASSETS = ['./', './index.html', './manifest.webmanifest', './icon-180.png', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', e => {

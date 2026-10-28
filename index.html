@@ -206,6 +206,7 @@
   .pill.map{border-color:var(--ai);color:var(--ai)}
   .pill.rt{border-color:var(--lc,var(--ai));color:var(--ink);background:var(--card)}
   .pill.rt i{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--lc,var(--ai));flex:none}
+  .pill.full{border-color:var(--lc,var(--ai));color:var(--ink);background:var(--card)}
   .pill.tel{border-color:var(--ok);color:var(--ok)}
   .pill.web{border-color:var(--kin);color:var(--kin-ink)}
   .pill.drv{border-color:var(--kin);color:var(--kin-ink)}
@@ -352,54 +353,75 @@ const HOTELS = {
   },
 };
 
-/* 路線站序：st = [代號, 站名, 英文]；pre/post = 前後一站（淡色，只為看方向） */
+/* 官方全線圖（外部連結，需要網路） */
+const MAPS = {
+  metro:{grp:'大阪地鐵', nm:'Osaka Metro 全線路線圖', sub:'官方・圖片，可放大', color:'#E5171F', url:'https://subway.osakametro.co.jp/img/osakametro_rosenzu_20250404.gif'},
+  jr_kansai:{grp:'JR 全關西', nm:'JR 西日本 全關西路線圖', sub:'官方・繁體中文 PDF', color:'#0072BC', url:'https://www.westjr.co.jp/global/tc/timetable/pdf/map_kansai.pdf'},
+  jr_kyoto:{grp:'JR 京都', nm:'JR 京都地區路線圖', sub:'官方・繁體中文 PDF', color:'#0072BC', url:'https://www.westjr.co.jp/global/tc/timetable/pdf/map_kyoto.pdf'},
+  jr_osaka:{grp:'JR 大阪', nm:'JR 大阪地區路線圖', sub:'官方・繁體中文 PDF', color:'#0072BC', url:'https://www.westjr.co.jp/global/tc/timetable/pdf/map_osaka.pdf'},
+  kyoto_bus:{grp:'京都巴士', nm:'京都市巴士・地鐵路線圖', sub:'京都市交通局・中文 PDF（2026/3 改訂）', color:'#3E8E5E', url:'https://www.city.kyoto.lg.jp/kotsu/cmsfiles/contents/0000019/19770/CHS%28map%29260320busnavi.pdf'},
+};
+
+/* 路線站序：st = [代號, 站名, 英文]；pre/post = 前後一站（淡色，只為看方向）；map = 對應的官方全線圖 */
 const ROUTES = {
+  bus206_go:{
+    line:'京都市巴士 206', color:'#3E8E5E', dir:'往 <b>三十三間堂・清水寺・祇園</b> 方向', time:'約 40 分鐘', map:'kyoto_bus',
+    pre:['','七条大宮・京都水族館前','Nanajo Omiya'],
+    st:[['','七条堀川','Nanajo Horikawa'],['','下京区総合庁舎前','Shimogyo Ward Office'],['','京都駅前','Kyoto Station'],['','烏丸七条','Karasuma Nanajo'],['','七条河原町','Nanajo Kawaramachi'],['','七条京阪前','Nanajo Keihan-mae'],['','博物館三十三間堂前','Hakubutsukan Sanjusangendo-mae'],['','東山七条','Higashiyama Nanajo'],['','馬町','Umamachi'],['','五条坂','Gojozaka'],['','清水道','Kiyomizu-michi']],
+    post:['','東山安井','Higashiyama Yasui'],
+    note:'七条堀川路口兩邊都有站牌，要在往<b>「三十三間堂・清水寺・祇園」</b>方向那一側上車（公車會先繞進京都駅前）。清水道下車後走上坡到清水寺。'
+  },
+  bus206_back:{
+    line:'京都市巴士 206', color:'#3E8E5E', dir:'往 <b>京都駅・四条大宮</b> 方向', time:'約 35 分鐘', map:'kyoto_bus',
+    pre:['','東山安井','Higashiyama Yasui'],
+    st:[['','清水道','Kiyomizu-michi'],['','五条坂','Gojozaka'],['','馬町','Umamachi'],['','東山七条','Higashiyama Nanajo'],['','博物館三十三間堂前','Hakubutsukan Sanjusangendo-mae'],['','七条京阪前','Nanajo Keihan-mae'],['','七条河原町','Nanajo Kawaramachi'],['','烏丸七条','Karasuma Nanajo'],['','京都駅前','Kyoto Station'],['','下京区総合庁舎前','Shimogyo Ward Office']],
+    post:['','七条堀川','Nanajo Horikawa'],
+    note:'在清水道搭往<b>「博物館・三十三間堂・京都駅」</b>方向的 206。下京區總合廳舍前是京都駅前的下一站；如果那班車只開到京都駅前，就在京都駅前下車走回飯店。'
+  },
   sagano_go:{
-    line:'JR 嵯峨野線', color:'#7D4C9E', dir:'往 <b>嵯峨嵐山・龜岡</b> 方向', time:'約 20 分鐘',
+    line:'JR 嵯峨野線', color:'#7D4C9E', dir:'往 <b>嵯峨嵐山・龜岡</b> 方向', time:'約 20 分鐘', map:'jr_kyoto',
     st:[['JR-E01','京都','Kyoto'],['JR-E02','梅小路京都西','Umekoji-Kyotonishi'],['JR-E03','丹波口','Tambaguchi'],['JR-E04','二条','Nijo'],['JR-E05','円町','Emmachi'],['JR-E06','花園','Hanazono'],['JR-E07','太秦','Uzumasa'],['JR-E08','嵯峨嵐山','Saga-Arashiyama']],
     post:['JR-E09','保津峡','Hozukyo'],
     note:'普通車每站都停；快速車會跳過部分小站，兩種都會到嵯峨嵐山。'
   },
   sagano_back:{
-    line:'JR 嵯峨野線', color:'#7D4C9E', dir:'往 <b>京都</b> 方向', time:'約 20 分鐘',
+    line:'JR 嵯峨野線', color:'#7D4C9E', dir:'往 <b>京都</b> 方向', time:'約 20 分鐘', map:'jr_kyoto',
     pre:['JR-E09','保津峡','Hozukyo'],
     st:[['JR-E08','嵯峨嵐山','Saga-Arashiyama'],['JR-E07','太秦','Uzumasa'],['JR-E06','花園','Hanazono'],['JR-E05','円町','Emmachi'],['JR-E04','二条','Nijo'],['JR-E03','丹波口','Tambaguchi'],['JR-E02','梅小路京都西','Umekoji-Kyotonishi'],['JR-E01','京都','Kyoto']],
     note:'京都是終點站，坐到底就對了。'
   },
   kyoto_line:{
-    line:'JR 京都線', color:'#0072BC', dir:'往 <b>大阪・神戶</b> 方向', time:'新快速約 30 分鐘', omit:true,
+    line:'JR 京都線', color:'#0072BC', dir:'往 <b>大阪・神戶</b> 方向', time:'新快速約 30 分鐘', omit:true, map:'jr_kansai',
     st:[['','京都','Kyoto'],['','高槻','Takatsuki'],['','新大阪','Shin-Osaka'],['','大阪','Osaka']],
     note:'虛線代表中間還有站（只列新快速的主要停靠站）。搭<b>新快速</b>最快；普通車也會到，只是站數多、比較久。大阪站就是梅田。'
   },
   loop:{
-    line:'JR 大阪環狀線', color:'#F07A21', dir:'<b>外回り</b>・往 <b>京橋・鶴橋</b> 方向', time:'約 10 分鐘',
+    line:'JR 大阪環狀線', color:'#F07A21', dir:'<b>外回り</b>・往 <b>京橋・鶴橋</b> 方向', time:'約 10 分鐘', map:'jr_osaka',
     pre:['','福島','Fukushima'],
     st:[['','大阪','Osaka'],['','天満','Temma'],['','桜ノ宮','Sakuranomiya'],['','京橋','Kyobashi'],['','大阪城公園','Osakajokoen']],
     post:['','森ノ宮','Morinomiya'],
     note:'環狀線兩個方向都會繞到，但搭<b>外回り（京橋方向）</b>只要 4 站。'
   },
   nagahori:{
-    line:'Osaka Metro 長堀鶴見綠地線', color:'#9BC53D', dir:'往 <b>大正</b> 方向', time:'約 10 分鐘',
+    line:'Osaka Metro 長堀鶴見綠地線', color:'#9BC53D', dir:'往 <b>大正</b> 方向', time:'約 10 分鐘', map:'metro',
     pre:['N21','大阪ビジネスパーク','Osaka Business Park'],
     st:[['N20','森ノ宮','Morinomiya'],['N19','玉造','Tamatsukuri'],['N18','谷町六丁目','Tanimachi 6-chome'],['N17','松屋町','Matsuyamachi'],['N16','長堀橋','Nagahoribashi'],['N15','心斎橋','Shinsaibashi']],
     post:['N14','西大橋','Nishi-Ohashi'],
-    note:'月台找黃綠色「N」標誌。森ノ宮也有中央線（綠色 C），別搭錯。',
-    link:'https://subway.osakametro.co.jp/guide/routemap.php'
+    note:'月台找黃綠色「N」標誌。森ノ宮也有中央線（綠色 C），別搭錯。'
   },
   yotsubashi:{
-    line:'Osaka Metro 四橋線', color:'#0078BA', dir:'往 <b>西梅田</b> 方向', time:'約 10 分鐘',
+    line:'Osaka Metro 四橋線', color:'#0078BA', dir:'往 <b>西梅田</b> 方向', time:'約 10 分鐘', map:'metro',
     pre:['Y16','大国町','Daikokucho'],
     st:[['Y15','難波','Namba'],['Y14','四ツ橋','Yotsubashi'],['Y13','本町','Hommachi'],['Y12','肥後橋','Higobashi'],['Y11','西梅田','Nishi-Umeda']],
-    note:'月台找藍色「Y」標誌。難波站有御堂筋線（紅色 M）和千日前線，別搭錯。西梅田是終點站。',
-    link:'https://subway.osakametro.co.jp/guide/routemap.php'
+    note:'月台找藍色「Y」標誌。難波站有御堂筋線（紅色 M）和千日前線，別搭錯。西梅田是終點站。'
   },
   haruka_in:{
-    line:'JR 特急 HARUKA', color:'#2B5DA8', dir:'往 <b>京都</b> 方向', time:'約 1 小時 20 分鐘', omit:true,
+    line:'JR 特急 HARUKA', color:'#2B5DA8', dir:'往 <b>京都</b> 方向', time:'約 1 小時 20 分鐘', omit:true, map:'jr_kansai',
     st:[['','関西空港','Kansai Airport'],['','りんくうタウン','Rinku Town'],['','日根野','Hineno'],['','天王寺','Tennoji'],['','大阪','Osaka'],['','新大阪','Shin-Osaka'],['','京都','Kyoto']],
     note:'特急列車，只停主要站（依車次可能略有不同）。京都是終點，坐到底。'
   },
   haruka_out:{
-    line:'JR 特急 HARUKA', color:'#2B5DA8', dir:'往 <b>關西機場</b> 方向', time:'約 50 分鐘', omit:true,
+    line:'JR 特急 HARUKA', color:'#2B5DA8', dir:'往 <b>關西機場</b> 方向', time:'約 50 分鐘', omit:true, map:'jr_kansai',
     pre:['','新大阪','Shin-Osaka'],
     st:[['','大阪','Osaka'],['','天王寺','Tennoji'],['','日根野','Hineno'],['','りんくうタウン','Rinku Town'],['','関西空港','Kansai Airport']],
     note:'大阪站的 HARUKA 在<b>「うめきたエリア」地下月台</b>上車，跟一般 JR 月台不同，要預留走路時間。關西空港是終點。'
@@ -429,9 +451,9 @@ const TRIP = [
   {
     date:'2026-12-10', d:'12/10', w:'四', title:'清水寺・移動大阪', stay:[['kyoto',0],['osaka',900]],
     items:[
-      {t:'08:00 集合', ic:'🚌', k:'move', nm:'七条堀川 → 清水道', ln:'市公車 206', sb:'車程約 40 分鐘', q:'七条堀川 バス停', ql:'七条堀川站牌', to:'清水道 バス停', tl:'清水道'},
+      {t:'08:00 集合', ic:'🚌', k:'move', nm:'七条堀川 → 清水道', ln:'市公車 206', sb:'車程約 40 分鐘', rt:'bus206_go', q:'七条堀川 バス停', ql:'七条堀川站牌', to:'清水道 バス停', tl:'清水道'},
       {t:'09:00 – 13:00', ic:'⛩️', k:'spot', nm:'清水寺・逛街吃飯', sb:'午餐自理（商店街）', q:'清水寺', mode:'walking'},
-      {t:'13:10 – 14:00', ic:'🚌', k:'move', nm:'清水道 → 下京區總合廳舍前', ln:'市公車 206', sb:'下京區公所・車程約 35 分鐘', q:'清水道 バス停', ql:'清水道站牌', to:'下京区総合庁舎前 バス停', tl:'下京區公所'},
+      {t:'13:10 – 14:00', ic:'🚌', k:'move', nm:'清水道 → 下京區總合廳舍前', ln:'市公車 206', sb:'下京區公所・車程約 35 分鐘', rt:'bus206_back', q:'清水道 バス停', ql:'清水道站牌', to:'下京区総合庁舎前 バス停', tl:'下京區公所'},
       {t:'14:10 – 14:30', ic:'🚶', k:'move', nm:'下京區公所 → 京都麗嘉皇家酒店 → 京都車站', ln:'走路', sb:'回飯店拿行李去大阪', q:HOTELS.kyoto.q, ql:'飯店', to:HOTELS.kyoto.q, tl:'飯店', mode:'walking', stay:'kyoto'},
       {t:'14:30 – 15:00', ic:'🚃', k:'move', nm:'京都車站 → 大阪梅田', ln:'JR 京都線', sb:'車程約 30 分鐘', rt:'kyoto_line', q:'京都駅', ql:'京都站', to:'大阪駅', tl:'大阪站'},
       {t:'15:00 – 15:20', ic:'🏨', k:'stay', nm:'Hotel Intergate 大阪梅田', ln:'走路', sb:'先 check in，再去逛梅田', q:HOTELS.osaka.q, stay:'osaka', mode:'walking'},
@@ -467,7 +489,7 @@ const INFO = {
   lines:[
     {k:'機場線', nm:'JR HARUKA', note:'12/8 機場 → 京都・12/12 大阪 → 機場', rt:'haruka_in'},
     {k:'京都', nm:'JR 嵯峨野線', note:'12/9 京都站 ⇄ 嵯峨嵐山站', rt:'sagano_go'},
-    {k:'京都', nm:'市公車 206', note:'12/10 七条堀川 ⇄ 清水道'},
+    {k:'京都', nm:'市公車 206', note:'12/10 七条堀川 ⇄ 清水道', rt:'bus206_go'},
     {k:'京都→大阪', nm:'JR 京都線', note:'12/10 京都車站 → 大阪梅田', rt:'kyoto_line'},
     {k:'大阪', nm:'JR 大阪環狀線', note:'12/11 → 大阪城公園站', rt:'loop'},
     {k:'大阪', nm:'地鐵 長堀鶴見綠地線', note:'12/11 森之宮 → 心齋橋', rt:'nagahori'},
@@ -488,6 +510,7 @@ const PIN='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-wid
 const GO='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 21 3l-8.5 18-2-7.5z"/></svg>';
 const PHONE='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6.2 6.2l1.3-1.3a2 2 0 0 1 2.1-.5c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg>';
 const LINK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg>';
+const FOLD='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4 3 6.5V20l6-2.5 6 2.5 6-2.5V4l-6 2.5z"/><path d="M9 4v13.5M15 6.5V20"/></svg>';
 const CHECK='<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"/></svg>';
 
 /* 日本時間；網址加 ?now=2026-12-10T13:20 可模擬旅途中的某個時刻 */
@@ -546,6 +569,7 @@ function pillGo(q,mode,label,big){ return '<a class="pill go'+(big?' big':'')+'"
 function pillTel(tel,big){ return '<a class="pill tel'+(big?' big':'')+'" href="tel:'+tel.replace(/[^0-9+]/g,'')+'">'+PHONE+esc(tel)+'</a>' }
 function pillWeb(url,label,big){ return '<a class="pill web'+(big?' big':'')+'" target="_blank" rel="noopener" href="'+esc(url)+'">'+LINK+esc(label)+'</a>' }
 function pillRt(key,big){ return '<button class="pill rt'+(big?' big':'')+'" data-rt="'+key+'" style="--lc:'+ROUTES[key].color+'"><i></i>路線圖</button>' }
+function pillFull(key,big,label){ const m=MAPS[key]; return '<a class="pill full'+(big?' big':'')+'" target="_blank" rel="noopener" href="'+m.url+'" style="--lc:'+m.color+'">'+FOLD+esc(label||'全線圖')+'</a>' }
 function pillDrv(key,big){ return '<button class="pill drv'+(big?' big':'')+'" data-drv="'+key+'">🚕 給司機看</button>' }
 
 function itemActs(it,big){
@@ -553,6 +577,7 @@ function itemActs(it,big){
   const dest=it.nav===false?null:(it.to||it.q);
   if(dest) a+=pillGo(dest,it.mode,it.tl?'導航到 '+it.tl:'導航',big);
   if(it.rt) a+=pillRt(it.rt,big);
+  if(it.rt && ROUTES[it.rt].map) a+=pillFull(ROUTES[it.rt].map,big);
   if(it.q) a+=pillMap(it.q,it.ql,big);
   if(it.more) it.more.forEach(m=>{ a+=pillMap(m.q,m.nm,big) });
   if(it.stay) a+=pillDrv(it.stay,big);
@@ -662,9 +687,17 @@ function renderInfo(){
   h+='<div class="panel"><div class="head"><h2>交通</h2><span class="cnt">'+INFO.lines.length+' 條路線</span></div>';
   INFO.lines.forEach(l=>{
     h+='<div class="kv"><div class="k">'+esc(l.k)+'</div><div class="v"><b>'+esc(l.nm)+'</b><em>'+esc(l.note)+'</em>'+
-       (l.rt?'<div class="acts">'+pillRt(l.rt)+'</div>':'')+'</div></div>';
+       (l.rt?'<div class="acts">'+pillRt(l.rt)+(ROUTES[l.rt].map?pillFull(ROUTES[l.rt].map):'')+'</div>':'')+'</div></div>';
   });
   h+='</div>';
+
+  h+='<div class="panel"><div class="head"><h2>全線圖</h2><span class="cnt">官方路線圖</span></div>';
+  Object.keys(MAPS).forEach(k=>{
+    const m=MAPS[k];
+    h+='<div class="kv"><div class="k">'+esc(m.grp)+'</div><div class="v"><b>'+esc(m.nm)+'</b><em>'+esc(m.sub)+'</em>'+
+       '<div class="acts">'+pillFull(k,false,'打開')+'</div></div></div>';
+  });
+  h+='<div class="note">需要網路。建議出發前先打開一次存到手機（iPhone：分享 → 儲存到「檔案」；Android：下載後用檔案 App 開）。</div></div>';
 
   h+='<div class="panel"><div class="head"><h2>緊急電話</h2><span class="cnt">日本</span></div>'+
      '<div class="kv"><div class="k">警察</div><div class="v"><div class="acts" style="margin-top:0">'+pillTel('110')+'</div></div></div>'+
@@ -676,7 +709,7 @@ function renderInfo(){
      '<p><b>入境：</b>出發前先在 Visit Japan Web 填好入境與海關資料，QR Code 截圖存手機。</p>'+
      '<p><b>免稅改制：</b>2026/11/1 起日本改成「出境退稅」—— 免稅店結帳先付含稅價，出境時在機場海關確認商品後才退稅（購買後 90 天內）。免稅品要留在身邊，12/12 到機場記得預留時間辦理。</p>'+
      '<p><b>加到主畫面：</b>iPhone 用 Safari → 分享 → 加入主畫面；Android 用 Chrome → 選單 → 加到主畫面。加了之後<b>沒網路也能打開行程</b>（導航、地圖、匯率仍需要網路）。</p>'+
-     '<p><b>操作：</b>左右滑動可以切換天數；「導航」會直接打開 Google 地圖的大眾運輸路線；「路線圖」會圈出上車站和下車站。</p>'+
+     '<p><b>操作：</b>左右滑動可以切換天數；「導航」會直接打開 Google 地圖的大眾運輸路線；「路線圖」會圈出上車站和下車站；「全線圖」打開官方的整張路線圖。</p>'+
      '<p><b>時差：</b>日本比台灣快 1 小時，頁面上的「現在／下一站」都以日本時間計算。</p>'+
      '<p><b>完成勾選</b>只存在自己的手機裡，不會同步給其他人（主畫面 App 和瀏覽器也各自分開）。</p>'+
      '</div><div class="note" style="padding-top:0"><button class="btn" onclick="resetDone()">清除所有勾選</button></div></div>';
@@ -740,7 +773,11 @@ function routeHTML(key){
   if(r.post) h+=stn(r.post,'ext');
   h+='</ol>';
   if(r.note) h+='<div class="sh-note">'+r.note+'</div>';
-  if(r.link) h+='<div class="acts" style="margin-top:12px"><a class="pill map" target="_blank" rel="noopener" href="'+r.link+'">'+LINK+'Osaka Metro 官方全線圖</a></div>';
+  if(r.map){
+    const m=MAPS[r.map];
+    h+='<div class="acts" style="margin-top:14px;display:grid">'+pillFull(r.map,true,'看 '+m.nm)+'</div>'+
+       '<div class="sh-meta" style="text-align:center;margin-top:8px">'+esc(m.sub)+'・需要網路</div>';
+  }
   return h;
 }
 function driverHTML(key){
