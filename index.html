@@ -254,13 +254,21 @@
   .sheet{position:fixed;inset:0;z-index:50;background:var(--scrim);display:flex;align-items:flex-end;justify-content:center}
   .sheet[hidden]{display:none}
   .sheet-card{
-    position:relative;background:var(--panel);width:100%;max-width:560px;max-height:90vh;overflow:auto;
-    border-radius:16px 16px 0 0;padding:18px 16px calc(18px + env(safe-area-inset-bottom));
-    box-shadow:0 -10px 40px rgba(0,0,0,.25);-webkit-overflow-scrolling:touch
+    position:relative;background:var(--panel);width:100%;max-width:560px;max-height:92vh;overflow:auto;
+    border:1px solid var(--rule);border-bottom:0;border-radius:18px 18px 0 0;padding:0;
+    box-shadow:0 -12px 40px rgba(0,0,0,.35);-webkit-overflow-scrolling:touch;overscroll-behavior:contain;
+    transition:transform .2s ease
   }
-  @media (min-width:640px){ .sheet{align-items:center} .sheet-card{border-radius:14px} }
-  .x{position:absolute;top:10px;right:10px;width:40px;height:40px;border-radius:50%;border:1px solid var(--rule);background:var(--card);color:var(--ink);font-size:20px;line-height:1;cursor:pointer}
-  .sh-head{display:flex;gap:12px;align-items:center;padding-right:46px}
+  @media (min-width:640px){ .sheet{align-items:center} .sheet-card{border-radius:14px;border-bottom:1px solid var(--rule)} }
+  .sh-top{position:sticky;top:0;z-index:2;display:flex;justify-content:flex-end;align-items:center;padding:16px 12px 8px;background:var(--panel)}
+  .grab{position:absolute;left:50%;top:7px;width:44px;height:5px;margin-left:-22px;border-radius:3px;background:var(--muted);opacity:.5}
+  .x{appearance:none;border:0;border-radius:999px;background:var(--ink);color:var(--paper);font:700 13px var(--sans);padding:9px 15px;min-height:38px;cursor:pointer;letter-spacing:.04em}
+  .sh-body{padding:0 16px 4px}
+  .sh-foot{position:sticky;bottom:0;z-index:2;padding:14px 16px calc(14px + env(safe-area-inset-bottom));background:linear-gradient(to bottom, rgba(0,0,0,0), var(--panel) 28%)}
+  .back{appearance:none;width:100%;min-height:52px;border:0;border-radius:12px;background:var(--ink);color:var(--paper);font:700 16px var(--sans);letter-spacing:.06em;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.18)}
+  .back:active,.x:active{transform:translateY(1px)}
+  body.locked{overscroll-behavior:none}
+  .sh-head{display:flex;gap:12px;align-items:center}
   .sh-head .lc{width:10px;align-self:stretch;border-radius:4px;background:var(--lc);flex:none}
   .sh-t{font-size:18px;font-weight:700;letter-spacing:-.01em}
   .sh-s{font-size:13px;color:var(--ink);margin-top:3px}
@@ -334,8 +342,12 @@
 <footer>Kyoto · Osaka 2026 · 點勾勾記錄完成 · 左右滑動換天</footer>
 </div>
 
-<div class="sheet" id="sheet" hidden role="dialog" aria-modal="true">
-  <div class="sheet-card"><button class="x" data-close aria-label="關閉">×</button><div id="sheetBody"></div></div>
+<div class="sheet" id="sheet" hidden role="dialog" aria-modal="true" aria-label="詳細資訊">
+  <div class="sheet-card">
+    <div class="sh-top"><span class="grab" aria-hidden="true"></span><button class="x" data-close>✕ 關閉</button></div>
+    <div class="sh-body" id="sheetBody"></div>
+    <div class="sh-foot"><button class="back" data-close>‹ 返回行程</button></div>
+  </div>
 </div>
 
 <script>
@@ -577,7 +589,6 @@ function itemActs(it,big){
   const dest=it.nav===false?null:(it.to||it.q);
   if(dest) a+=pillGo(dest,it.mode,it.tl?'導航到 '+it.tl:'導航',big);
   if(it.rt) a+=pillRt(it.rt,big);
-  if(it.rt && ROUTES[it.rt].map) a+=pillFull(ROUTES[it.rt].map,big);
   if(it.q) a+=pillMap(it.q,it.ql,big);
   if(it.more) it.more.forEach(m=>{ a+=pillMap(m.q,m.nm,big) });
   if(it.stay) a+=pillDrv(it.stay,big);
@@ -687,7 +698,7 @@ function renderInfo(){
   h+='<div class="panel"><div class="head"><h2>交通</h2><span class="cnt">'+INFO.lines.length+' 條路線</span></div>';
   INFO.lines.forEach(l=>{
     h+='<div class="kv"><div class="k">'+esc(l.k)+'</div><div class="v"><b>'+esc(l.nm)+'</b><em>'+esc(l.note)+'</em>'+
-       (l.rt?'<div class="acts">'+pillRt(l.rt)+(ROUTES[l.rt].map?pillFull(ROUTES[l.rt].map):'')+'</div>':'')+'</div></div>';
+       (l.rt?'<div class="acts">'+pillRt(l.rt)+'</div>':'')+'</div></div>';
   });
   h+='</div>';
 
@@ -709,7 +720,7 @@ function renderInfo(){
      '<p><b>入境：</b>出發前先在 Visit Japan Web 填好入境與海關資料，QR Code 截圖存手機。</p>'+
      '<p><b>免稅改制：</b>2026/11/1 起日本改成「出境退稅」—— 免稅店結帳先付含稅價，出境時在機場海關確認商品後才退稅（購買後 90 天內）。免稅品要留在身邊，12/12 到機場記得預留時間辦理。</p>'+
      '<p><b>加到主畫面：</b>iPhone 用 Safari → 分享 → 加入主畫面；Android 用 Chrome → 選單 → 加到主畫面。加了之後<b>沒網路也能打開行程</b>（導航、地圖、匯率仍需要網路）。</p>'+
-     '<p><b>操作：</b>左右滑動可以切換天數；「導航」會直接打開 Google 地圖的大眾運輸路線；「路線圖」會圈出上車站和下車站；「全線圖」打開官方的整張路線圖。</p>'+
+     '<p><b>操作：</b>左右滑動可以切換天數；「導航」會直接打開 Google 地圖的大眾運輸路線；「路線圖」會圈出上車站和下車站，裡面也能打開官方全線圖；看完按下方「返回行程」、手機的返回鍵，或把卡片往下滑就回來。</p>'+
      '<p><b>時差：</b>日本比台灣快 1 小時，頁面上的「現在／下一站」都以日本時間計算。</p>'+
      '<p><b>完成勾選</b>只存在自己的手機裡，不會同步給其他人（主畫面 App 和瀏覽器也各自分開）。</p>'+
      '</div><div class="note" style="padding-top:0"><button class="btn" onclick="resetDone()">清除所有勾選</button></div></div>';
@@ -789,13 +800,42 @@ function driverHTML(key){
          '<div class="ask">ここまでお願いします。</div><div class="zh">（請載我到這裡）</div>'+
          '<div class="acts" style="margin-top:16px">'+pillTel(H.tel)+pillGo(H.q,'transit','導航')+'</div></div>';
 }
+/* 卡片開啟時推一筆瀏覽紀錄，讓手機的返回鍵／返回手勢是關卡片而不是離開頁面 */
+const HAS_HISTORY=typeof history!=='undefined' && !!history.pushState;
 function openSheet(html){
+  const s=document.getElementById('sheet'), card=s.querySelector('.sheet-card');
   document.getElementById('sheetBody').innerHTML=html;
-  const s=document.getElementById('sheet'); s.hidden=false; s.querySelector('.sheet-card').scrollTop=0;
+  if(s.hidden && HAS_HISTORY) history.pushState({sheet:1},'');
+  s.hidden=false; card.scrollTop=0; card.style.transform='';
   document.body.classList.add('locked');
 }
-function closeSheet(){ document.getElementById('sheet').hidden=true; document.body.classList.remove('locked') }
+function hideSheet(){ document.getElementById('sheet').hidden=true; document.body.classList.remove('locked') }
+function closeSheet(){
+  if(!sheetOpen()) return;
+  if(HAS_HISTORY && history.state && history.state.sheet) history.back(); else hideSheet();
+}
 const sheetOpen=()=>!document.getElementById('sheet').hidden;
+if(typeof window!=='undefined' && window.addEventListener){
+  window.addEventListener('popstate',()=>{ if(sheetOpen()) hideSheet() });
+  if(HAS_HISTORY && history.state && history.state.sheet) history.replaceState(null,'');
+}
+
+/* 卡片在最上方時往下滑可關閉 */
+(function(){
+  const card=document.getElementById('sheet').querySelector('.sheet-card');
+  let y0=null, dy=0;
+  card.addEventListener('touchstart',e=>{ y0=card.scrollTop<=0?e.touches[0].clientY:null; dy=0 },{passive:true});
+  card.addEventListener('touchmove',e=>{
+    if(y0===null) return;
+    dy=e.touches[0].clientY-y0;
+    if(dy>0){ card.style.transition='none'; card.style.transform='translateY('+dy+'px)' }
+  },{passive:true});
+  card.addEventListener('touchend',()=>{
+    if(y0===null) return;
+    card.style.transition=''; y0=null;
+    if(dy>90) closeSheet(); else card.style.transform='';
+  },{passive:true});
+})();
 
 /* ================= 主流程 ================= */
 function render(){
