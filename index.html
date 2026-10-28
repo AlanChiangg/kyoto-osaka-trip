@@ -7,8 +7,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="京阪">
-<meta name="theme-color" content="#F4EFE7" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#161412" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#F4EFE7">
 <meta name="robots" content="noindex, nofollow">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-180.png">
@@ -23,7 +22,9 @@
     --muted:#77706A;
     --rule:#DED5C7;
     --line:rgba(222,213,199,.7);
-    --grid:rgba(34,32,30,.04);
+    --glow:rgba(194,65,45,.10);
+    /* 青海波（seigaiha）淡紋，填色需等於 --paper */
+    --pat:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='20' viewBox='0 0 40 20'%3E%3Cg fill='%23F4EFE7' stroke='%232E4A6B' stroke-opacity='0.09' stroke-width='1'%3E%3Ccircle cx='20' cy='-10' r='20'/%3E%3Ccircle cx='20' cy='-10' r='15'/%3E%3Ccircle cx='20' cy='-10' r='10'/%3E%3Ccircle cx='20' cy='-10' r='5'/%3E%3Ccircle cx='0' cy='0' r='20'/%3E%3Ccircle cx='0' cy='0' r='15'/%3E%3Ccircle cx='0' cy='0' r='10'/%3E%3Ccircle cx='0' cy='0' r='5'/%3E%3Ccircle cx='40' cy='0' r='20'/%3E%3Ccircle cx='40' cy='0' r='15'/%3E%3Ccircle cx='40' cy='0' r='10'/%3E%3Ccircle cx='40' cy='0' r='5'/%3E%3Ccircle cx='20' cy='10' r='20'/%3E%3Ccircle cx='20' cy='10' r='15'/%3E%3Ccircle cx='20' cy='10' r='10'/%3E%3Ccircle cx='20' cy='10' r='5'/%3E%3Ccircle cx='0' cy='20' r='20'/%3E%3Ccircle cx='0' cy='20' r='15'/%3E%3Ccircle cx='0' cy='20' r='10'/%3E%3Ccircle cx='0' cy='20' r='5'/%3E%3Ccircle cx='40' cy='20' r='20'/%3E%3Ccircle cx='40' cy='20' r='15'/%3E%3Ccircle cx='40' cy='20' r='10'/%3E%3Ccircle cx='40' cy='20' r='5'/%3E%3Ccircle cx='20' cy='30' r='20'/%3E%3Ccircle cx='20' cy='30' r='15'/%3E%3Ccircle cx='20' cy='30' r='10'/%3E%3Ccircle cx='20' cy='30' r='5'/%3E%3C/g%3E%3C/svg%3E");
     --ai:#2E4A6B;
     --ai-soft:rgba(46,74,107,.08);
     --on-ai:#FFFFFF;
@@ -40,41 +41,15 @@
     --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
     --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
     --jp:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic","Meiryo",var(--sans);
-    color-scheme:light dark;
-  }
-  @media (prefers-color-scheme:dark){
-    :root{
-      --paper:#161412;
-      --panel:#201D1A;
-      --card:#2A2622;
-      --ink:#EEE7DC;
-      --muted:#A39A8F;
-      --rule:#3A3530;
-      --line:rgba(58,53,48,.9);
-      --grid:rgba(255,255,255,.025);
-      --ai:#93B4DC;
-      --ai-soft:rgba(147,180,220,.12);
-      --on-ai:#10161F;
-      --shu:#E3705A;
-      --shu-soft:rgba(227,112,90,.13);
-      --kin:#D2AA5C;
-      --kin-ink:#D2AA5C;
-      --kin-soft:rgba(210,170,92,.13);
-      --ink-soft:rgba(255,255,255,.06);
-      --ok:#8DB867;
-      --mark:#FF5A47;
-      --scrim:rgba(0,0,0,.66);
-      --shadow:0 1px 0 rgba(0,0,0,.3), 0 8px 22px -14px rgba(0,0,0,.6);
-    }
+    color-scheme:light;
   }
   *{box-sizing:border-box}
   html,body{margin:0;padding:0}
   body{
-    background:var(--paper);
-    background-image:
-      linear-gradient(to right, var(--grid) 1px, transparent 1px),
-      linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
-    background-size:22px 22px;
+    background-color:var(--paper);
+    background-image:radial-gradient(120% 100% at 50% 0%, var(--glow), transparent 70%), var(--pat);
+    background-repeat:no-repeat, repeat;
+    background-size:100% 420px, 48px 24px;
     color:var(--ink);
     font-family:var(--sans);
     -webkit-font-smoothing:antialiased;
@@ -111,6 +86,7 @@
   /* ---- tabs ---- */
   nav{
     position:sticky;top:0;z-index:20;background:var(--paper);
+    background:rgba(244,239,231,.86);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
     border-bottom:1px solid var(--rule);display:flex;gap:0;margin-bottom:16px;
     overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch
   }
@@ -260,13 +236,12 @@
     transition:transform .2s ease
   }
   @media (min-width:640px){ .sheet{align-items:center} .sheet-card{border-radius:14px;border-bottom:1px solid var(--rule)} }
-  .sh-top{position:sticky;top:0;z-index:2;display:flex;justify-content:flex-end;align-items:center;padding:16px 12px 8px;background:var(--panel)}
-  .grab{position:absolute;left:50%;top:7px;width:44px;height:5px;margin-left:-22px;border-radius:3px;background:var(--muted);opacity:.5}
-  .x{appearance:none;border:0;border-radius:999px;background:var(--ink);color:var(--paper);font:700 13px var(--sans);padding:9px 15px;min-height:38px;cursor:pointer;letter-spacing:.04em}
-  .sh-body{padding:0 16px 4px}
-  .sh-foot{position:sticky;bottom:0;z-index:2;padding:14px 16px calc(14px + env(safe-area-inset-bottom));background:linear-gradient(to bottom, rgba(0,0,0,0), var(--panel) 28%)}
+  .sh-top{position:relative;height:26px}
+  .grab{position:absolute;left:50%;top:9px;width:44px;height:5px;margin-left:-22px;border-radius:3px;background:var(--muted);opacity:.45}
+  .sh-body{padding:4px 16px 4px}
+  .sh-foot{position:sticky;bottom:0;z-index:2;padding:14px 16px calc(14px + env(safe-area-inset-bottom));background:linear-gradient(to bottom, rgba(255,253,250,0), var(--panel) 28%)}
   .back{appearance:none;width:100%;min-height:52px;border:0;border-radius:12px;background:var(--ink);color:var(--paper);font:700 16px var(--sans);letter-spacing:.06em;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.18)}
-  .back:active,.x:active{transform:translateY(1px)}
+  .back:active{transform:translateY(1px)}
   body.locked{overscroll-behavior:none}
   .sh-head{display:flex;gap:12px;align-items:center}
   .sh-head .lc{width:10px;align-self:stretch;border-radius:4px;background:var(--lc);flex:none}
@@ -297,6 +272,10 @@
   .sh-note{font-size:12.5px;color:var(--muted);line-height:1.65;margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
   .sh-note b{color:var(--ink)}
 
+  .mapbar{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:12px}
+  .mapbar #zl{font-family:var(--mono);font-size:12px;color:var(--muted)}
+  .mapbox{margin-top:10px;max-height:58vh;overflow:auto;border:1px solid var(--rule);border-radius:10px;background:#fff;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+  .mapbox img{display:block;max-width:none;height:auto}
   .drv{padding:6px 2px 4px}
   .drv .lbl{font-size:11px}
   .drv .jpn{font-family:var(--jp);font-size:32px;font-weight:800;line-height:1.25;margin-top:14px;letter-spacing:.01em}
@@ -344,9 +323,9 @@
 
 <div class="sheet" id="sheet" hidden role="dialog" aria-modal="true" aria-label="詳細資訊">
   <div class="sheet-card">
-    <div class="sh-top"><span class="grab" aria-hidden="true"></span><button class="x" data-close>✕ 關閉</button></div>
+    <div class="sh-top"><span class="grab" aria-hidden="true"></span></div>
     <div class="sh-body" id="sheetBody"></div>
-    <div class="sh-foot"><button class="back" data-close>‹ 返回行程</button></div>
+    <div class="sh-foot"><button class="back" data-back>‹ 返回行程</button></div>
   </div>
 </div>
 
@@ -367,7 +346,7 @@ const HOTELS = {
 
 /* 官方全線圖（外部連結，需要網路） */
 const MAPS = {
-  metro:{grp:'大阪地鐵', nm:'Osaka Metro 全線路線圖', sub:'官方・圖片，可放大', color:'#E5171F', url:'https://subway.osakametro.co.jp/img/osakametro_rosenzu_20250404.gif'},
+  metro:{grp:'大阪地鐵', nm:'Osaka Metro 全線路線圖', sub:'官方圖片・可縮放，存在手機可離線看', color:'#E5171F', img:true, url:'https://subway.osakametro.co.jp/img/osakametro_rosenzu_20250404.gif'},
   jr_kansai:{grp:'JR 全關西', nm:'JR 西日本 全關西路線圖', sub:'官方・繁體中文 PDF', color:'#0072BC', url:'https://www.westjr.co.jp/global/tc/timetable/pdf/map_kansai.pdf'},
   jr_kyoto:{grp:'JR 京都', nm:'JR 京都地區路線圖', sub:'官方・繁體中文 PDF', color:'#0072BC', url:'https://www.westjr.co.jp/global/tc/timetable/pdf/map_kyoto.pdf'},
   jr_osaka:{grp:'JR 大阪', nm:'JR 大阪地區路線圖', sub:'官方・繁體中文 PDF', color:'#0072BC', url:'https://www.westjr.co.jp/global/tc/timetable/pdf/map_osaka.pdf'},
@@ -581,7 +560,11 @@ function pillGo(q,mode,label,big){ return '<a class="pill go'+(big?' big':'')+'"
 function pillTel(tel,big){ return '<a class="pill tel'+(big?' big':'')+'" href="tel:'+tel.replace(/[^0-9+]/g,'')+'">'+PHONE+esc(tel)+'</a>' }
 function pillWeb(url,label,big){ return '<a class="pill web'+(big?' big':'')+'" target="_blank" rel="noopener" href="'+esc(url)+'">'+LINK+esc(label)+'</a>' }
 function pillRt(key,big){ return '<button class="pill rt'+(big?' big':'')+'" data-rt="'+key+'" style="--lc:'+ROUTES[key].color+'"><i></i>路線圖</button>' }
-function pillFull(key,big,label){ const m=MAPS[key]; return '<a class="pill full'+(big?' big':'')+'" target="_blank" rel="noopener" href="'+m.url+'" style="--lc:'+m.color+'">'+FOLD+esc(label||'全線圖')+'</a>' }
+function pillFull(key,big,label){
+  const m=MAPS[key], cls='pill full'+(big?' big':''), inner=FOLD+esc(label||'全線圖');
+  return m.img ? '<button class="'+cls+'" data-map="'+key+'" style="--lc:'+m.color+'">'+inner+'</button>'
+               : '<a class="'+cls+'" target="_blank" rel="noopener" href="'+m.url+'" style="--lc:'+m.color+'">'+inner+'</a>';
+}
 function pillDrv(key,big){ return '<button class="pill drv'+(big?' big':'')+'" data-drv="'+key+'">🚕 給司機看</button>' }
 
 function itemActs(it,big){
@@ -708,7 +691,7 @@ function renderInfo(){
     h+='<div class="kv"><div class="k">'+esc(m.grp)+'</div><div class="v"><b>'+esc(m.nm)+'</b><em>'+esc(m.sub)+'</em>'+
        '<div class="acts">'+pillFull(k,false,'打開')+'</div></div></div>';
   });
-  h+='<div class="note">需要網路。建議出發前先打開一次存到手機（iPhone：分享 → 儲存到「檔案」；Android：下載後用檔案 App 開）。</div></div>';
+  h+='<div class="note">大阪地鐵圖在網站裡直接看，第一次打開網站時就會存到手機，沒網路也能看。JR 和京都巴士是 PDF，需要網路，建議出發前先打開一次存到手機（iPhone：分享 → 儲存到「檔案」；Android：下載後用檔案 App 開）。</div></div>';
 
   h+='<div class="panel"><div class="head"><h2>緊急電話</h2><span class="cnt">日本</span></div>'+
      '<div class="kv"><div class="k">警察</div><div class="v"><div class="acts" style="margin-top:0">'+pillTel('110')+'</div></div></div>'+
@@ -787,9 +770,28 @@ function routeHTML(key){
   if(r.map){
     const m=MAPS[r.map];
     h+='<div class="acts" style="margin-top:14px;display:grid">'+pillFull(r.map,true,'看 '+m.nm)+'</div>'+
-       '<div class="sh-meta" style="text-align:center;margin-top:8px">'+esc(m.sub)+'・需要網路</div>';
+       '<div class="sh-meta" style="text-align:center;margin-top:8px">'+esc(m.sub)+(m.img?'':'・需要網路')+'</div>';
   }
   return h;
+}
+/* 站內看圖（只用於官方圖片檔；PDF 手機無法內嵌，仍開新分頁） */
+const ZOOMS=[100,180,300,450];
+function mapHTML(key){
+  const m=MAPS[key];
+  return '<div class="sh-head" style="--lc:'+m.color+'"><span class="lc"></span><div><div class="sh-t">'+esc(m.nm)+'</div>'+
+         '<div class="sh-s">按「＋ 放大」後可以拖曳移動</div></div></div>'+
+         '<div class="mapbar"><button class="pill" data-zoom="-1">－ 縮小</button><span id="zl">全圖</span><button class="pill" data-zoom="1">＋ 放大</button></div>'+
+         '<div class="mapbox" data-z="0"><img src="'+m.url+'" alt="'+esc(m.nm)+'" style="width:100%" onerror="mapFail(this)"></div>'+
+         '<div class="sh-meta" style="text-align:center;margin-top:8px">官方圖片・第一次打開網站時會存到手機，沒網路也能看</div>';
+}
+function mapFail(img){ img.parentNode.innerHTML='<div class="note">目前沒有網路，手機裡也還沒存到這張圖。連上網路後打開一次就會存好。</div>' }
+function zoomMap(step){
+  const box=document.querySelector('.mapbox'), img=box&&box.querySelector('img'); if(!img) return;
+  const z=Math.max(0,Math.min(ZOOMS.length-1,(+box.dataset.z||0)+step));
+  const cx=(box.scrollLeft+box.clientWidth/2)/box.scrollWidth, cy=(box.scrollTop+box.clientHeight/2)/box.scrollHeight;
+  box.dataset.z=z; img.style.width=ZOOMS[z]+'%';
+  box.scrollLeft=cx*box.scrollWidth-box.clientWidth/2; box.scrollTop=cy*box.scrollHeight-box.clientHeight/2;
+  document.getElementById('zl').textContent=z?ZOOMS[z]/100+'×':'全圖';
 }
 function driverHTML(key){
   const H=HOTELS[key];
@@ -800,23 +802,38 @@ function driverHTML(key){
          '<div class="ask">ここまでお願いします。</div><div class="zh">（請載我到這裡）</div>'+
          '<div class="acts" style="margin-top:16px">'+pillTel(H.tel)+pillGo(H.q,'transit','導航')+'</div></div>';
 }
-/* 卡片開啟時推一筆瀏覽紀錄，讓手機的返回鍵／返回手勢是關卡片而不是離開頁面 */
+/* 卡片可以一層疊一層（路線圖 → 全線圖）；每開一層推一筆瀏覽紀錄，
+   手機返回鍵／返回手勢和底部「返回」按鈕都是退一層，不會離開頁面 */
 const HAS_HISTORY=typeof history!=='undefined' && !!history.pushState;
-function openSheet(html){
+let STACK=[];
+function showSheet(html){
   const s=document.getElementById('sheet'), card=s.querySelector('.sheet-card');
   document.getElementById('sheetBody').innerHTML=html;
-  if(s.hidden && HAS_HISTORY) history.pushState({sheet:1},'');
+  s.querySelector('.back').textContent=STACK.length>1?'‹ 返回上一頁':'‹ 返回行程';
   s.hidden=false; card.scrollTop=0; card.style.transform='';
   document.body.classList.add('locked');
 }
-function hideSheet(){ document.getElementById('sheet').hidden=true; document.body.classList.remove('locked') }
+function openSheet(html){
+  STACK.push(html);
+  if(HAS_HISTORY) history.pushState({sheet:STACK.length},'');
+  showSheet(html);
+}
+function hideSheet(){ STACK=[]; document.getElementById('sheet').hidden=true; document.body.classList.remove('locked') }
+function syncSheet(depth){
+  STACK.length=Math.min(STACK.length,depth);
+  if(STACK.length) showSheet(STACK[STACK.length-1]); else hideSheet();
+}
+function backSheet(){
+  if(HAS_HISTORY && history.state && history.state.sheet) history.back(); else syncSheet(STACK.length-1);
+}
 function closeSheet(){
   if(!sheetOpen()) return;
-  if(HAS_HISTORY && history.state && history.state.sheet) history.back(); else hideSheet();
+  const d=HAS_HISTORY && history.state && history.state.sheet;
+  if(d) history.go(-d); else hideSheet();
 }
 const sheetOpen=()=>!document.getElementById('sheet').hidden;
 if(typeof window!=='undefined' && window.addEventListener){
-  window.addEventListener('popstate',()=>{ if(sheetOpen()) hideSheet() });
+  window.addEventListener('popstate',()=>{ syncSheet((history.state && history.state.sheet)||0) });
   if(HAS_HISTORY && history.state && history.state.sheet) history.replaceState(null,'');
 }
 
@@ -824,7 +841,7 @@ if(typeof window!=='undefined' && window.addEventListener){
 (function(){
   const card=document.getElementById('sheet').querySelector('.sheet-card');
   let y0=null, dy=0;
-  card.addEventListener('touchstart',e=>{ y0=card.scrollTop<=0?e.touches[0].clientY:null; dy=0 },{passive:true});
+  card.addEventListener('touchstart',e=>{ y0=card.scrollTop<=0 && !e.target.closest('.mapbox')?e.touches[0].clientY:null; dy=0 },{passive:true});
   card.addEventListener('touchmove',e=>{
     if(y0===null) return;
     dy=e.touches[0].clientY-y0;
@@ -864,6 +881,9 @@ document.addEventListener('click',e=>{
   }
   const rt=e.target.closest('[data-rt]'); if(rt){ openSheet(routeHTML(rt.dataset.rt)); return }
   const dv=e.target.closest('[data-drv]'); if(dv){ openSheet(driverHTML(dv.dataset.drv)); return }
+  const mp=e.target.closest('[data-map]'); if(mp){ openSheet(mapHTML(mp.dataset.map)); return }
+  const zm=e.target.closest('[data-zoom]'); if(zm){ zoomMap(+zm.dataset.zoom); return }
+  if(e.target.closest('[data-back]')){ backSheet(); return }
   if(e.target.closest('[data-close]') || e.target.id==='sheet') closeSheet();
 });
 document.addEventListener('keydown',e=>{
