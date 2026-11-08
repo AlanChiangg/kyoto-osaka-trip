@@ -343,6 +343,10 @@ const HOTELS = {
     q:'ホテルインターゲート大阪梅田', near:'JR 大阪站櫻橋口步行約 5 分鐘', d:'12/10 – 12/12（2 晚）・12/12 11:00 check out'
   },
 };
+/* 搭計程車去的景點，也能打開「給司機看」 */
+const PLACES = {
+  inari:{nm:'伏見稻荷大社', jp:'伏見稲荷大社', addr:'〒612-0882 京都府京都市伏見区深草藪之内町68', tel:'075-641-7331', q:'伏見稲荷大社'},
+};
 
 /* 官方全線圖（外部連結，需要網路） */
 const MAPS = {
@@ -375,11 +379,11 @@ const ROUTES = {
     post:['JR-E09','保津峡','Hozukyo'],
     note:'普通車每站都停；快速車會跳過部分小站，兩種都會到嵯峨嵐山。'
   },
-  sagano_back:{
-    line:'JR 嵯峨野線', color:'#7D4C9E', dir:'往 <b>京都</b> 方向', time:'約 20 分鐘', map:'jr_kyoto',
-    pre:['JR-E09','保津峡','Hozukyo'],
-    st:[['JR-E08','嵯峨嵐山','Saga-Arashiyama'],['JR-E07','太秦','Uzumasa'],['JR-E06','花園','Hanazono'],['JR-E05','円町','Emmachi'],['JR-E04','二条','Nijo'],['JR-E03','丹波口','Tambaguchi'],['JR-E02','梅小路京都西','Umekoji-Kyotonishi'],['JR-E01','京都','Kyoto']],
-    note:'京都是終點站，坐到底就對了。'
+  nara_back:{
+    line:'JR 奈良線', color:'#9C6B3A', dir:'往 <b>京都</b> 方向', time:'約 10 分鐘', map:'jr_kyoto',
+    pre:['','JR藤森','JR Fujinomori'],
+    st:[['','稲荷','Inari'],['','東福寺','Tofukuji'],['','京都','Kyoto']],
+    note:'JR 的站名是<b>「稲荷」</b>，就在伏見稻荷大社門口；京阪電車那站才叫「伏見稲荷」，別走錯。往京都方向的車都開到京都（終點站），坐到底就對了。有些快速車不停稲荷，在月台等會停的車就好。'
   },
   kyoto_line:{
     line:'JR 京都線', color:'#0072BC', dir:'往 <b>大阪・神戶</b> 方向', time:'新快速約 30 分鐘', omit:true, map:'jr_kansai',
@@ -430,12 +434,13 @@ const TRIP = [
     ]
   },
   {
-    date:'2026-12-09', d:'12/9', w:'三', title:'嵐山・京都站', stay:[['kyoto',0]],
+    date:'2026-12-09', d:'12/9', w:'三', title:'嵐山・伏見稻荷', stay:[['kyoto',0]],
     items:[
       {t:'08:00 集合', ic:'🚃', k:'move', nm:'JR 京都站 → JR 嵯峨嵐山站', ln:'JR 嵯峨野線', sb:'約 20 分鐘・預計 9 點到達｜早餐在京都車站或嵐山吃都可以', rt:'sagano_go', q:'京都駅', ql:'京都站', to:'JR嵯峨嵐山駅', tl:'嵯峨嵐山站'},
       {t:'中午', ic:'🍜', k:'food', nm:'嵐山よしむら', sb:'蕎麥麵・午餐｜不能預約、現場排隊，預計 2 點離開嵐山', q:'嵐山よしむら'},
-      {t:'14:00', ic:'🚃', k:'move', nm:'JR 嵯峨嵐山站 → JR 京都站', ln:'JR 嵯峨野線', sb:'約 20 分鐘', rt:'sagano_back', q:'JR嵯峨嵐山駅', ql:'嵯峨嵐山站', to:'京都駅', tl:'京都站'},
-      {t:'', ic:'🛍️', k:'spot', nm:'逛街買伴手禮 & 京都塔', sb:'京都車站周邊', q:'京都タワー'},
+      {t:'14:00', ic:'🚕', k:'move', nm:'嵐山 → 伏見稻荷', ln:'計程車', sb:'車程約 40 分鐘・6 個人要叫 2 台（一台最多坐 4 人）・車站前排班或用 GO、Uber App 叫車', q:'伏見稲荷大社', ql:'伏見稻荷', to:'伏見稲荷大社', tl:'伏見稻荷', mode:'driving', drv:'inari'},
+      {t:'15:00 – 18:00', ic:'⛩️', k:'spot', nm:'伏見稻荷大社・逛街', sb:'千本鳥居・參道小吃｜12 月天黑得早（約 16:45），想拍鳥居先走', q:'伏見稲荷大社', mode:'walking'},
+      {t:'18:10 – 18:20', ic:'🚃', k:'move', nm:'JR 稻荷站 → JR 京都站', ln:'JR 奈良線', sb:'車程約 10 分鐘・JR 站名是「稲荷」，不是京阪的「伏見稲荷」', rt:'nara_back', q:'JR稲荷駅', ql:'JR 稻荷站', to:'京都駅', tl:'京都站'},
       {t:'19:00', ic:'🍱', k:'food', nm:'江戶川 近鐵京都站店', sb:'鰻魚・晚餐（Porta 店）', q:'江戸川 近鉄京都駅店', url:'https://tabelog.com/tw/kyoto/A2601/A260101/26003102/', ul:'Tabelog'},
     ]
   },
@@ -479,7 +484,9 @@ const INFO = {
   ],
   lines:[
     {k:'機場線', nm:'JR HARUKA', note:'12/8 機場 → 京都・12/12 大阪 → 機場', rt:'haruka_in'},
-    {k:'京都', nm:'JR 嵯峨野線', note:'12/9 京都站 ⇄ 嵯峨嵐山站', rt:'sagano_go'},
+    {k:'京都', nm:'JR 嵯峨野線', note:'12/9 京都站 → 嵯峨嵐山站', rt:'sagano_go'},
+    {k:'京都', nm:'計程車', note:'12/9 嵐山 → 伏見稻荷・6 人叫 2 台', drv:'inari'},
+    {k:'京都', nm:'JR 奈良線', note:'12/9 稻荷站 → 京都站', rt:'nara_back'},
     {k:'京都', nm:'市公車 206', note:'12/10 七条堀川 ⇄ 清水道', rt:'bus206_go'},
     {k:'京都→大阪', nm:'JR 京都線', note:'12/10 京都車站 → 大阪梅田', rt:'kyoto_line'},
     {k:'大阪', nm:'JR 大阪環狀線', note:'12/11 → 大阪城公園站', rt:'loop'},
@@ -565,7 +572,7 @@ function pillFull(key,big,label){
   return m.img ? '<button class="'+cls+'" data-map="'+key+'" style="--lc:'+m.color+'">'+inner+'</button>'
                : '<a class="'+cls+'" target="_blank" rel="noopener" href="'+m.url+'" style="--lc:'+m.color+'">'+inner+'</a>';
 }
-function pillDrv(key,big){ return '<button class="pill drv'+(big?' big':'')+'" data-drv="'+key+'">🚕 給司機看</button>' }
+function pillDrv(key,big,label){ return '<button class="pill drv'+(big?' big':'')+'" data-drv="'+key+'">'+esc(label||'🚕 給司機看')+'</button>' }
 
 function itemActs(it,big){
   let a='';
@@ -574,7 +581,7 @@ function itemActs(it,big){
   if(it.rt) a+=pillRt(it.rt,big);
   if(it.q) a+=pillMap(it.q,it.ql,big);
   if(it.more) it.more.forEach(m=>{ a+=pillMap(m.q,m.nm,big) });
-  if(it.stay) a+=pillDrv(it.stay,big);
+  if(it.drv||it.stay) a+=pillDrv(it.drv||it.stay,big);
   if(it.url) a+=pillWeb(it.url,it.ul||'網站',big);
   if(it.tel) a+=pillTel(it.tel,big);
   return a;
@@ -621,7 +628,7 @@ function renderToday(i,now,pr){
   }
   if(hk){
     const H=HOTELS[hk];
-    h+='<div class="quick">'+pillGo(H.q,'transit','回飯店',true)+pillDrv(hk,true)+'</div>';
+    h+='<div class="quick">'+pillGo(H.q,'transit','回飯店',true)+pillDrv(hk,true,'🚕 飯店給司機看')+'</div>';
   }
   return h+'</div>';
 }
@@ -681,7 +688,7 @@ function renderInfo(){
   h+='<div class="panel"><div class="head"><h2>交通</h2><span class="cnt">'+INFO.lines.length+' 條路線</span></div>';
   INFO.lines.forEach(l=>{
     h+='<div class="kv"><div class="k">'+esc(l.k)+'</div><div class="v"><b>'+esc(l.nm)+'</b><em>'+esc(l.note)+'</em>'+
-       (l.rt?'<div class="acts">'+pillRt(l.rt)+'</div>':'')+'</div></div>';
+       (l.rt||l.drv?'<div class="acts">'+(l.rt?pillRt(l.rt):'')+(l.drv?pillDrv(l.drv):'')+'</div>':'')+'</div></div>';
   });
   h+='</div>';
 
@@ -794,11 +801,11 @@ function zoomMap(step){
   document.getElementById('zl').textContent=z?ZOOMS[z]/100+'×':'全圖';
 }
 function driverHTML(key){
-  const H=HOTELS[key];
+  const H=HOTELS[key]||PLACES[key];
   return '<div class="drv"><div class="lbl">タクシーの運転手さんへ · 請給司機看</div>'+
          '<div class="jpn">'+esc(H.jp)+'</div>'+
          '<div class="addr">'+esc(H.addr)+'</div>'+
-         '<div class="addr" style="font-size:16px;margin-top:6px">TEL '+esc(H.tel)+'</div>'+
+         (H.tel?'<div class="addr" style="font-size:16px;margin-top:6px">TEL '+esc(H.tel)+'</div>':'')+
          '<div class="ask">ここまでお願いします。</div><div class="zh">（請載我到這裡）</div>'+
          '<div class="acts" style="margin-top:16px">'+pillTel(H.tel)+pillGo(H.q,'transit','導航')+'</div></div>';
 }
