@@ -1,8 +1,8 @@
 /* 離線快取：頁面先試網路（3 秒內沒回應就用快取），圖示等靜態檔直接用快取。
    官方地鐵圖不放進 repo，而是由使用者的手機從官方網站下載後存在自己的快取裡。
    改了 index.html 要把 VERSION 加 1，手機才會換新。 */
-const VERSION = 'keihan-v11';
-const ASSETS = ['./', './index.html', './manifest.webmanifest', './icon-180.png', './icon-192.png', './icon-512.png'];
+const VERSION = 'keihan-v12';
+const ASSETS = ['./', './index.html', './manifest.webmanifest', './icon-180.png', './icon-192.png', './icon-512.png', './a2hs.js'];
 const EXTERNAL = ['https://subway.osakametro.co.jp/img/osakametro_rosenzu_20250404.gif'];
 
 function cacheExternal(c) {
