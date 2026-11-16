@@ -1,7 +1,7 @@
 /* 離線快取：頁面先試網路（3 秒內沒回應就用快取），圖示等靜態檔直接用快取。
    官方地鐵圖不放進 repo，而是由使用者的手機從官方網站下載後存在自己的快取裡。
    改了 index.html 要把 VERSION 加 1，手機才會換新。 */
-const VERSION = 'keihan-v10';
+const VERSION = 'keihan-v11';
 const ASSETS = ['./', './index.html', './manifest.webmanifest', './icon-180.png', './icon-192.png', './icon-512.png'];
 const EXTERNAL = ['https://subway.osakametro.co.jp/img/osakametro_rosenzu_20250404.gif'];
 
@@ -20,7 +20,8 @@ self.addEventListener('install', e => {
 self.addEventListener('activate', e => {
   e.waitUntil(
     caches.keys()
-      .then(keys => Promise.all(keys.filter(k => k !== VERSION).map(k => caches.delete(k))))
+      // 同一個 github.io 網域下的其他網站也有快取，只刪自己的舊版本
+      .then(keys => Promise.all(keys.filter(k => k.startsWith('keihan-') && k !== VERSION).map(k => caches.delete(k))))
       .then(() => self.clients.claim())
   );
 });
