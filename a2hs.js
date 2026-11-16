@@ -50,6 +50,7 @@
     '.a2hs-step{display:grid;grid-template-columns:30px 1fr;gap:10px;padding:11px 0;border-top:1px solid #ECE6DC}'+
     '.a2hs-step i{font-style:normal;width:28px;height:28px;border-radius:50%;background:#1F2A33;color:#fff;display:grid;place-items:center;font-weight:700;font-size:14px}'+
     '.a2hs-step b{font-weight:700}'+
+    '.a2hs-step img{display:block;width:100%;max-width:360px;height:auto;border-radius:10px;margin-top:8px;border:1px solid #E3DDD3;background:#2a2a2a}'+
     '.a2hs-step small{display:block;color:#6F7880;font-size:12.5px}'+
     '.a2hs-ic{display:inline-flex;vertical-align:-6px;width:26px;height:26px;border:1.5px solid #C8CDD2;border-radius:7px;align-items:center;justify-content:center;margin:0 2px;color:#0A7AFF}'+
     '.a2hs-ic svg{width:16px;height:16px}'+
@@ -73,14 +74,20 @@
     }
   }
 
+  /* 截圖是實機畫面（紅圈是要按的地方），四個網站共用 */
+  function step(n,text,hint,img,alt){
+    return '<div class="a2hs-step"><i>'+n+'</i><div>'+text+(hint?'<small>'+hint+'</small>':'')+
+      (img?'<img src="'+img+'" alt="'+esc(alt)+'" loading="lazy">':'')+'</div></div>';
+  }
   function guide(){
     if(document.querySelector('.a2hs-ov')) return;
     var ov=el('<div class="a2hs-ov" role="dialog" aria-modal="true"><div class="a2hs-card">'+
-      '<h3>加到主畫面，像 App 一樣用</h3><div class="a2hs-sub">iPhone 不允許網頁自己加入，跟著做三步就好</div>'+
-      '<div class="a2hs-step"><i>1</i><div>點 Safari 下方的<b>「分享」</b><span class="a2hs-ic">'+SHARE+'</span><small>沒看到的話，先點下方的「⋯」</small></div></div>'+
-      '<div class="a2hs-step"><i>2</i><div>選<b>「加入主畫面」</b><span class="a2hs-ic">'+PLUS+'</span><small>沒看到就往下滑，或點「檢視較多」</small></div></div>'+
-      '<div class="a2hs-step"><i>3</i><div>名字可以改成<b>「'+esc(appName)+'」</b>，<b>「打開為網頁 App」</b>保持開啟，按右上角<b>「加入」</b></div></div>'+
-      '<div class="a2hs-step"><i>4</i><div>之後都從主畫面的圖示打開<small>沒網路也能開；勾選和記錄都存在那個圖示裡，跟 Safari 分開</small></div></div>'+
+      '<h3>加到主畫面，像 App 一樣用</h3><div class="a2hs-sub">iPhone 不允許網頁自己加入，照著點四下就好・紅圈是要按的地方（畫面以胡志明行程為例）</div>'+
+      step(1,'點下方中間的<b>「分享」</b><span class="a2hs-ic">'+SHARE+'</span>','看不到下方工具列時，往上滑一下畫面就會出現；新版 Safari 也可能要先點「⋯」','a2hs-1.webp','Safari 下方工具列，中間的分享按鈕被紅圈圈起來')+
+      step(2,'點<b>「檢視較多」</b>','在分享選單第二排的最右邊','a2hs-2.webp','分享選單，第二排最右邊的「檢視較多」被紅圈圈起來')+
+      step(3,'點<b>「加入主畫面」</b><span class="a2hs-ic">'+PLUS+'</span>','','a2hs-3.webp','展開的清單，「加入主畫面」被紅圈圈起來')+
+      step(4,'名字打<b>「'+esc(appName)+'」</b>，<b>「打開為網頁 App」</b>保持開啟，按右上角<b>「加入」</b>','','a2hs-4.webp','加入主畫面畫面，紅圈處填名字，右上角是「加入」')+
+      step(5,'完成！之後都從主畫面的圖示打開','沒網路也能開；勾選和記錄都存在那個圖示裡，跟 Safari 分開')+
       '<div class="a2hs-row"><button class="a2hs-btn" data-a2hs-never>不再顯示按鈕</button><button class="a2hs-btn main" data-a2hs-close>知道了</button></div>'+
       '</div></div>');
     ov.addEventListener('click',function(e){
