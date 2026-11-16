@@ -32,7 +32,8 @@
   var cleanURL=(function(){ var u=new URL(location.href); u.searchParams.delete(P); u.searchParams.delete('a2hs-test'); return u.toString() })();
 
   var css=
-    '.a2hs-pill{position:fixed;left:14px;bottom:calc(18px + env(safe-area-inset-bottom));z-index:40;display:flex;align-items:center;gap:6px;'+
+    /* 只會在 Safari 裡出現，所以讓開 Safari 下方的工具列 */
+    '.a2hs-pill{position:fixed;left:14px;bottom:calc(84px + env(safe-area-inset-bottom));z-index:40;display:flex;align-items:center;gap:6px;'+
       'border:0;border-radius:999px;background:#1F2A33;color:#fff;font:600 14px -apple-system,BlinkMacSystemFont,"PingFang TC","Noto Sans TC",sans-serif;'+
       'padding:11px 16px;box-shadow:0 6px 18px rgba(0,0,0,.28);cursor:pointer;-webkit-tap-highlight-color:transparent}'+
     'body.locked .a2hs-pill{display:none}'+
@@ -42,22 +43,31 @@
     '.a2hs-bar .a2hs-row{display:flex;gap:8px;margin-top:10px}'+
     '.a2hs-btn{appearance:none;flex:1;border:1.5px solid rgba(255,255,255,.35);background:transparent;color:inherit;border-radius:10px;min-height:44px;font-family:inherit;font-size:14.5px;font-weight:600;cursor:pointer}'+
     '.a2hs-btn.main{background:#fff;color:#1F2A33;border-color:#fff}'+
-    '.a2hs-ov{position:fixed;inset:0;z-index:90;background:rgba(15,20,24,.6);display:flex;align-items:flex-end;justify-content:center}'+
-    '.a2hs-card{width:100%;max-width:520px;max-height:92vh;overflow:auto;background:#fff;color:#1F2A33;border-radius:18px 18px 0 0;'+
-      'padding:20px 18px calc(16px + env(safe-area-inset-bottom));font:15px/1.6 -apple-system,BlinkMacSystemFont,"PingFang TC","Noto Sans TC",sans-serif}'+
-    '.a2hs-card h3{margin:0 0 4px;font-size:20px}'+
-    '.a2hs-card .a2hs-sub{color:#6F7880;font-size:13px;margin-bottom:14px}'+
-    '.a2hs-step{display:grid;grid-template-columns:30px 1fr;gap:10px;padding:11px 0;border-top:1px solid #ECE6DC}'+
-    '.a2hs-step i{font-style:normal;width:28px;height:28px;border-radius:50%;background:#1F2A33;color:#fff;display:grid;place-items:center;font-weight:700;font-size:14px}'+
-    '.a2hs-step b{font-weight:700}'+
-    '.a2hs-step img{display:block;width:100%;max-width:360px;height:auto;border-radius:10px;margin-top:8px;border:1px solid #E3DDD3;background:#2a2a2a}'+
-    '.a2hs-step small{display:block;color:#6F7880;font-size:12.5px}'+
+    /* 教學卡片：置中、上下讓開 Safari 的網址列和工具列；一步一頁，按鈕在卡片裡 */
+    '.a2hs-ov{position:fixed;left:0;right:0;top:0;bottom:0;z-index:90;background:rgba(15,20,24,.6);display:flex;align-items:center;justify-content:center;'+
+      'padding:calc(env(safe-area-inset-top) + 64px) 12px calc(env(safe-area-inset-bottom) + 92px);box-sizing:border-box}'+
+    '.a2hs-card{width:100%;max-width:460px;max-height:100%;display:flex;flex-direction:column;overflow:hidden;background:#fff;color:#1F2A33;'+
+      'border-radius:16px;box-shadow:0 18px 50px rgba(0,0,0,.35);font:15px/1.6 -apple-system,BlinkMacSystemFont,"PingFang TC","Noto Sans TC",sans-serif;touch-action:pan-y}'+
+    '.a2hs-hd{padding:18px 18px 6px;flex:none}'+
+    '.a2hs-hd h3{margin:0;font-size:18px}'+
+    '.a2hs-hd .a2hs-sub{color:#6F7880;font-size:12.5px;margin-top:2px}'+
+    '.a2hs-dots{display:flex;gap:5px;margin-top:10px}'+
+    '.a2hs-dots span{flex:1;height:4px;border-radius:2px;background:#E3DDD3}'+
+    '.a2hs-dots span.on{background:#1F2A33}'+
+    '.a2hs-bd{flex:1 1 auto;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding:8px 18px 12px}'+
+    '.a2hs-n{font-size:12px;font-weight:700;letter-spacing:.08em;color:#6F7880}'+
+    '.a2hs-tx{font-size:17.5px;line-height:1.55;margin-top:2px}'+
+    '.a2hs-tx b{font-weight:700}'+
+    '.a2hs-bd small{display:block;color:#6F7880;font-size:13px;margin-top:4px}'+
+    '.a2hs-bd img{display:block;max-width:100%;max-height:30vh;max-height:30svh;width:auto;height:auto;margin:12px auto 0;border-radius:12px;border:1px solid #E3DDD3;background:#2a2a2a}'+
+    '.a2hs-done{font-size:44px;text-align:center;margin:10px 0 0}'+
+    '.a2hs-never{appearance:none;display:block;border:0;background:none;color:#6F7880;font:inherit;font-size:13px;text-decoration:underline;padding:10px 0 0;cursor:pointer}'+
+    '.a2hs-ft{flex:none;display:flex;gap:8px;padding:12px 14px 14px;border-top:1px solid #ECE6DC;background:#fff}'+
+    '.a2hs-ft .a2hs-btn{border-color:#DED7CB;color:#1F2A33;min-height:48px}'+
+    '.a2hs-ft .a2hs-btn.main{flex:2;background:#1F2A33;color:#fff;border-color:#1F2A33}'+
     '.a2hs-ic{display:inline-flex;vertical-align:-6px;width:26px;height:26px;border:1.5px solid #C8CDD2;border-radius:7px;align-items:center;justify-content:center;margin:0 2px;color:#0A7AFF}'+
     '.a2hs-ic svg{width:16px;height:16px}'+
-    '.a2hs-card .a2hs-row{display:flex;gap:8px;margin-top:14px}'+
-    '.a2hs-card .a2hs-btn{border-color:#DED7CB;color:#1F2A33}'+
-    '.a2hs-card .a2hs-btn.main{background:#1F2A33;color:#fff;border-color:#1F2A33}'+
-    '@media (min-width:640px){.a2hs-ov{align-items:center}.a2hs-card{border-radius:14px}}';
+    'html.a2hs-lock,html.a2hs-lock body{overflow:hidden}';
   var st=document.createElement('style'); st.textContent=css; document.head.appendChild(st);
 
   var SHARE='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3M7.5 7.5 12 3l4.5 4.5"/><path d="M8 10H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-2"/></svg>';
@@ -74,27 +84,60 @@
     }
   }
 
-  /* 截圖是實機畫面（紅圈是要按的地方），四個網站共用 */
-  function step(n,text,hint,img,alt){
-    return '<div class="a2hs-step"><i>'+n+'</i><div>'+text+(hint?'<small>'+hint+'</small>':'')+
-      (img?'<img src="'+img+'" alt="'+esc(alt)+'" loading="lazy">':'')+'</div></div>';
-  }
+  /* 截圖是實機畫面（紅圈是要按的地方），四個網站共用；一步一頁，不用上下滑 */
+  var STEPS=[
+    {t:'點下方中間的<b>「分享」</b><span class="a2hs-ic">'+SHARE+'</span>',h:'看不到下方工具列時，往上滑一下畫面就會出現；新版 Safari 也可能要先點「⋯」',img:'a2hs-1.webp',alt:'Safari 下方工具列，中間的分享按鈕被紅圈圈起來'},
+    {t:'點<b>「檢視較多」</b>',h:'在分享選單第二排的最右邊',img:'a2hs-2.webp',alt:'分享選單，第二排最右邊的「檢視較多」被紅圈圈起來'},
+    {t:'點<b>「加入主畫面」</b><span class="a2hs-ic">'+PLUS+'</span>',h:'',img:'a2hs-3.webp',alt:'展開的清單，「加入主畫面」被紅圈圈起來'},
+    {t:'名字打<b>「'+esc(appName)+'」</b>，<b>「打開為網頁 App」</b>保持開啟，按右上角<b>「加入」</b>',h:'',img:'a2hs-4.webp',alt:'加入主畫面畫面，紅圈處填名字，右上角是「加入」'},
+    {t:'完成！之後都從主畫面的圖示打開',h:'沒網路也能開；勾選和記錄都存在那個圖示裡，跟 Safari 分開',done:true}
+  ];
   function guide(){
     if(document.querySelector('.a2hs-ov')) return;
-    var ov=el('<div class="a2hs-ov" role="dialog" aria-modal="true"><div class="a2hs-card">'+
-      '<h3>加到主畫面，像 App 一樣用</h3><div class="a2hs-sub">iPhone 不允許網頁自己加入，照著點四下就好・紅圈是要按的地方（畫面以胡志明行程為例）</div>'+
-      step(1,'點下方中間的<b>「分享」</b><span class="a2hs-ic">'+SHARE+'</span>','看不到下方工具列時，往上滑一下畫面就會出現；新版 Safari 也可能要先點「⋯」','a2hs-1.webp','Safari 下方工具列，中間的分享按鈕被紅圈圈起來')+
-      step(2,'點<b>「檢視較多」</b>','在分享選單第二排的最右邊','a2hs-2.webp','分享選單，第二排最右邊的「檢視較多」被紅圈圈起來')+
-      step(3,'點<b>「加入主畫面」</b><span class="a2hs-ic">'+PLUS+'</span>','','a2hs-3.webp','展開的清單，「加入主畫面」被紅圈圈起來')+
-      step(4,'名字打<b>「'+esc(appName)+'」</b>，<b>「打開為網頁 App」</b>保持開啟，按右上角<b>「加入」</b>','','a2hs-4.webp','加入主畫面畫面，紅圈處填名字，右上角是「加入」')+
-      step(5,'完成！之後都從主畫面的圖示打開','沒網路也能開；勾選和記錄都存在那個圖示裡，跟 Safari 分開')+
-      '<div class="a2hs-row"><button class="a2hs-btn" data-a2hs-never>不再顯示按鈕</button><button class="a2hs-btn main" data-a2hs-close>知道了</button></div>'+
-      '</div></div>');
+    STEPS.forEach(function(s){ if(s.img){ var im=new Image(); im.src=s.img } });
+    var i=0;
+    var ov=el('<div class="a2hs-ov" role="dialog" aria-modal="true" aria-label="加入主畫面教學"><div class="a2hs-card">'+
+      '<div class="a2hs-hd"><h3>加到主畫面，像 App 一樣用</h3><div class="a2hs-sub">紅圈是要按的地方・畫面以胡志明行程為例</div>'+
+      '<div class="a2hs-dots">'+STEPS.map(function(){ return '<span></span>' }).join('')+'</div></div>'+
+      '<div class="a2hs-bd"></div><div class="a2hs-ft"></div></div></div>');
+    var bd=ov.querySelector('.a2hs-bd'), ft=ov.querySelector('.a2hs-ft'), dots=ov.querySelectorAll('.a2hs-dots span');
+    function show(n){
+      i=Math.max(0,Math.min(STEPS.length-1,n));
+      var s=STEPS[i], last=i===STEPS.length-1;
+      bd.innerHTML='<div class="a2hs-n">第 '+(i+1)+' 步，共 '+STEPS.length+' 步</div><div class="a2hs-tx">'+s.t+'</div>'+(s.h?'<small>'+s.h+'</small>':'')+
+        (s.img?'<img src="'+s.img+'" alt="'+esc(s.alt)+'">':'')+(s.done?'<div class="a2hs-done">🎉</div><button class="a2hs-never" data-a2hs-never>不再顯示「加入主畫面」按鈕</button>':'');
+      bd.scrollTop=0;
+      ft.innerHTML=(i>0?'<button class="a2hs-btn" data-a2hs-prev>‹ 上一步</button>':'<button class="a2hs-btn" data-a2hs-close>關閉</button>')+
+        (last?'<button class="a2hs-btn main" data-a2hs-close>完成</button>':'<button class="a2hs-btn main" data-a2hs-next>下一步 ›</button>');
+      for(var k=0;k<dots.length;k++) dots[k].className=k<=i?'on':'';
+    }
+    /* 跟著實際看得到的畫面（網址列展開／收起時高度會變） */
+    var vv=window.visualViewport;
+    function fit(){ if(!vv) return; ov.style.top=vv.offsetTop+'px'; ov.style.height=vv.height+'px'; ov.style.bottom='auto' }
+    if(vv){ vv.addEventListener('resize',fit); vv.addEventListener('scroll',fit) }
+    function close(){
+      ov.remove(); document.documentElement.classList.remove('a2hs-lock'); document.removeEventListener('keydown',key);
+      if(vv){ vv.removeEventListener('resize',fit); vv.removeEventListener('scroll',fit) }
+    }
+    function key(e){ if(e.key==='Escape') close(); if(e.key==='ArrowRight') show(i+1); if(e.key==='ArrowLeft') show(i-1) }
     ov.addEventListener('click',function(e){
-      if(e.target===ov||e.target.closest('[data-a2hs-close]')){ ov.remove(); return }
-      if(e.target.closest('[data-a2hs-never]')){ try{ localStorage.setItem(HIDE,'1') }catch(_){} ov.remove(); var p=document.querySelector('.a2hs-pill'); if(p) p.remove() }
+      if(e.target===ov||e.target.closest('[data-a2hs-close]')){ close(); return }
+      if(e.target.closest('[data-a2hs-next]')){ show(i+1); return }
+      if(e.target.closest('[data-a2hs-prev]')){ show(i-1); return }
+      if(e.target.closest('[data-a2hs-never]')){ try{ localStorage.setItem(HIDE,'1') }catch(_){} close(); var p=document.querySelector('.a2hs-pill'); if(p) p.remove() }
     });
+    /* 左右滑也能換頁 */
+    var x0=null,y0=0;
+    ov.addEventListener('touchstart',function(e){ x0=e.touches[0].clientX; y0=e.touches[0].clientY },{passive:true});
+    ov.addEventListener('touchend',function(e){
+      if(x0===null) return;
+      var dx=e.changedTouches[0].clientX-x0, dy=e.changedTouches[0].clientY-y0; x0=null;
+      if(Math.abs(dx)>50 && Math.abs(dx)>Math.abs(dy)*1.5) show(i+(dx<0?1:-1));
+    },{passive:true});
+    document.addEventListener('keydown',key);
+    document.documentElement.classList.add('a2hs-lock');
     document.body.appendChild(ov);
+    fit(); show(0);
   }
   window.A2HS={open:guide};
   document.addEventListener('click',function(e){ if(e.target.closest&&e.target.closest('[data-a2hs-open]')) guide() });
